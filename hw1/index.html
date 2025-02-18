@@ -51,7 +51,14 @@
 		Give a high-level overview of what you implemented in this homework. Think about what you've built as a whole. Share your thoughts on what interesting things you've learned from completing the homework.
 
 		<h2>Task 1: Drawing Single-Color Triangles</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+		Rasterizing triangles in the simple case took three line tests. With three points as inputs to represent the vertices of a triangle, we can define a bounding box from the top-most, left-most to bottom-most, right-most point. We also define the edges of the triangle as the pairwise coordinates of two adjacent vertices. We can then iterate through every sample midpoint (x, y) + (0.5, 0.5) and perform cross-product line direction tests to see if the point is always on the left of the three given triangle lines (or always on the right, for clockwise-oriented triangles). If true, then we know the sample point is within the edges of the triangle, and can be rasterized via coloration of the pixel.
+
+		This approach thus only calculates the "inside-ness" of pixels within the bounding box that contains the triangle, rather than the entire frame. From the top left to bottom right, two for loops iterate every sample point starting at the top line, where it should contain the top vertex or edge of the triangle, then iterate the next row of pixels until it reaches the bottom edge or vertex. The for loops do not account for pixels beyond since we define our start and end conditions to be those maximum boundaries.
+
+		<figure>
+			<img src="Task 1 Triangles" alt="Task 1" style="width:50%" />
+			<figcaption>Here's what the triangles come out like!</figcaption>
+		</figure>
 
 		<p>Here is an example 2x2 gridlike structure using an HTML table. Each <b>tr</b> is a row and each <b>td</b> is a column in that row. You might find this useful for framing and showing your result images in an organized fashion.</p>
 		<div style="display: flex; flex-direction: column; align-items: center;">
