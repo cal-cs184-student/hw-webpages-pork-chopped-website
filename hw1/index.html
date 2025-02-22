@@ -89,6 +89,8 @@
 			<h2>Task 2: Antialiasing by Supersampling</h2>
 			In order to implement super sampling up to a sample rate of 16, we took advantage of a sample buffer. By scaling the sample buffer, we can take an input triangle, and effectively sample sub-pixels inside of each real pixel location. Unlike the basic case where we would sample the exact center of each pixel in a 1:1 ratio between the sample buffer and the frame buffer, we introduce two new parameters, dx and dy. Thus, we can test sub-pixel locations in a grid of sqrt(sample rate) x sqrt(sample rate). Take a sample rate of 16 for example, we could add dx and dy increments on top of each (x, y) pixel to test a 4 x 4 grid of sub pixels, and mark their locations in our sample buffer. In this case, our sample buffer would be 16 times as long, so that we could store 16 sub pixels for every 1 input pixel. After sampling all sub pixels, we resolve the sample buffer into our frame buffer by iterating through all the 16 pixel groupings, and downsample all of the sub pixels into a single pixel location via averaging. This effectively smoothes out locations with high frequency changes by spreading out that change in color over more pixels.
 
+			<br>
+
 			This task's largest challenge was understanding how scaling our sample buffer would make it possible to average our colors in each pixel. We started by attempting to average each coordinates' sub pixels before moving on, however this caused strange artefacts in cases where triangles were bordering. While individual triangles surrounded by background were anti-aliased fine, there were some collision issues were bordering triangles inside a pixel could not "communicate" that they were going to partially color a fraction of the pixel one color. This meant entire sections of pixels were left uncolored when new triangles overwrote the work of previous triangles. In order to super sample effectively, we had to collect all colors in the sample buffer first, where we could then work our way down.
 
 			<div style="display: flex; flex-direction: column; align-items: center;">
@@ -123,7 +125,36 @@
 			Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
 			<h2>Task 5: "Pixel sampling" for texture mapping</h2>
-			Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+			Task 5 picks up from Task 2's super-sampling code as a foundation, but incoporates the use of barycentric coordinates for fetching colors from a texture map. At each sub pixel, we use barycentric coordinates to determine how changes in the screen space (x,y) map to changes in the texture space (u,v) via our alpha, beta, and gamma proportions. After passing these values into our texture pixel (texel) sampler's parameters, we scale the (u,v) coordinates to the size of our texture map to select the return color. The rasterizer can either employ sampling via the nearest texel in the texture map (sample_nearest), or employ bilinear sampling that clamps the nearest upper left texel (since we define origin as the top left) and retuns the linearly interpolating the average color of it and its 3 corner texels based on proximity.
+
+			<br>
+
+			Linearly interpolating the texels can be important when your texture has high degrees of distortion, or high frequency changes, since the blending of the 4 nearby texels can reduce the amount of artefacts produced by sharp or jagged changes in color and shape!
+
+			<div style="display: flex; flex-direction: column; align-items: center;">
+				<table style="width: 100%; text-align: center; border-collapse: collapse;">
+					<tr>
+						<td style="text-align: center;">
+							<img src="T5 N1.png" width="400px" />
+							<figcaption>Jagged and jarring nearest sampling, without super samping, seen in warped text.</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="T5 N16.png" width="400px" />
+							<figcaption>Nearest sampling, with 16x super sampling, has improved but still spotty.</figcaption>
+						</td>
+					</tr>
+					<tr>
+						<td style="text-align: center;">
+							<img src="T5 B1.png" width="400px" />
+							<figcaption>Bilinear sampling, without super sampling, already smoother and consistent.</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="T5 B16.png" width="400px" />
+							<figcaption>Adding on 16x super sampling to bilinear pixel sampling has removed imperfection in the "K."</figcaption>
+						</td>
+					</tr>
+				</table>
+			</div>
 
 			<h2>Task 6: "Level Sampling" with mipmaps for texture mapping</h2>
 			Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
