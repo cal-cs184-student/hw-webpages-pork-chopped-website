@@ -32,15 +32,15 @@
 
 			<br>
 
-			Link to webpage: (TODO) <a href="https://cs184.eecs.berkeley.edu/sp25">cs184.eecs.berkeley.edu/sp25</a>
+			Link to webpage: (TODO) <a href="https://cal-cs184-student.github.io/hw-webpages-pork-chopped-website/hw1/index.html">cs184.eecs.berkeley.edu/sp25</a>
 
 			<br>
 
-			Link to GitHub repository: (TODO) <a href="https://cs184.eecs.berkeley.edu/sp25">cs184.eecs.berkeley.edu/sp25</a>
+			Link to GitHub repository: (TODO) <a href="https://github.com/cal-cs184-student/hw-webpages-pork-chopped-website">cs184.eecs.berkeley.edu/sp25</a>
 
 			<figure>
 				<img src="lion.jpg" alt="Lion" style="width:50%" />
-				<figcaption>You can add images with captions!</figcaption>
+				<figcaption>PEE PEE POO POO!</figcaption>
 			</figure>
 
 			<!--
@@ -60,31 +60,7 @@
 				<figcaption>Here's what the triangles come out like!</figcaption>
 			</figure>
 
-			<p>Here is an example 2x2 gridlike structure using an HTML table. Each <b>tr</b> is a row and each <b>td</b> is a column in that row. You might find this useful for framing and showing your result images in an organized fashion.</p>
-			<div style="display: flex; flex-direction: column; align-items: center;">
-				<table style="width: 100%; text-align: center; border-collapse: collapse;">
-					<tr>
-						<td style="text-align: center;">
-							<img src="lion.jpg" width="400px" />
-							<figcaption>Caption goes here.</figcaption>
-						</td>
-						<td style="text-align: center;">
-							<img src="lion.jpg" width="400px" />
-							<figcaption>Caption goes here.</figcaption>
-						</td>
-					</tr>
-					<tr>
-						<td style="text-align: center;">
-							<img src="lion.jpg" width="400px" />
-							<figcaption>Caption goes here.</figcaption>
-						</td>
-						<td style="text-align: center;">
-							<img src="lion.jpg" width="400px" />
-							<figcaption>Caption goes here.</figcaption>
-						</td>
-					</tr>
-				</table>
-			</div>
+			
 
 			<h2>Task 2: Antialiasing by Supersampling</h2>
 			In order to implement super sampling up to a sample rate of 16, we took advantage of a sample buffer. By scaling the sample buffer, we can take an input triangle, and effectively sample sub-pixels inside of each real pixel location. Unlike the basic case where we would sample the exact center of each pixel in a 1:1 ratio between the sample buffer and the frame buffer, we introduce two new parameters, dx and dy. Thus, we can test sub-pixel locations in a grid of sqrt(sample rate) x sqrt(sample rate). Take a sample rate of 16 for example, we could add dx and dy increments on top of each (x, y) pixel to test a 4 x 4 grid of sub pixels, and mark their locations in our sample buffer. In this case, our sample buffer would be 16 times as long, so that we could store 16 sub pixels for every 1 input pixel. After sampling all sub pixels, we resolve the sample buffer into our frame buffer by iterating through all the 16 pixel groupings, and downsample all of the sub pixels into a single pixel location via averaging. This effectively smoothes out locations with high frequency changes by spreading out that change in color over more pixels.
