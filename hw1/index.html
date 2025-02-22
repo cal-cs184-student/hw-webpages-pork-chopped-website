@@ -127,8 +127,11 @@
 
 
 			<h2>Task 4: Barycentric coordinates</h2>
-			Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
+			Barycentric coordinates are a way to select a point on a triangle of RGB where the point is unique in the sense that its location on the triangle has a unique rgb value, each point in the triangle has a unique rgb value that can be represented with barycentric coordinates. 
+                <figure>
+                    <img src="RainbowWheel.png" width="400px" />
+                    <figcaption>Here's what the color wheel looks like with default viewing parameters and sampling rate 1!</figcaption>
+                </figure>
 			<h2>Task 5: "Pixel sampling" for texture mapping</h2>
 			Task 5 picks up from Task 2's super-sampling code as a foundation, but incoporates the use of barycentric coordinates for fetching colors from a texture map. At each sub pixel, we use barycentric coordinates to determine how changes in the screen space (x,y) map to changes in the texture space (u,v) via our alpha, beta, and gamma proportions. After passing these values into our texture pixel (texel) sampler's parameters, we scale the (u,v) coordinates to the size of our texture map to select the return color. The rasterizer can either employ sampling via the nearest texel in the texture map (sample_nearest), or employ bilinear sampling that clamps the nearest upper left texel (since we define origin as the top left) and retuns the linearly interpolating the average color of it and its 3 corner texels based on proximity.
 
