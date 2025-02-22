@@ -127,7 +127,7 @@
 
 
 			<h2>Task 4: Barycentric coordinates</h2>
-			Barycentric coordinates are a way to select a point on a triangle of RGB where the point is unique in the sense that its location on the triangle has a unique rgb value, each point in the triangle has a unique rgb value that can be represented with barycentric coordinates using alpha, beta and gamma, for example if a point had a coordinate of alpha = 1, beta = 0, and gamma = 0, the sampled point could be an all red point since barycentric coordinates let us sample for a color or texture. 
+			Barycentric coordinates are a way to select a point on a RGB triangle, the point is unique in the sense that its location on the triangle has a unique rgb value, each point in the triangle has a unique rgb value that can be represented with barycentric coordinates using alpha, beta and gamma, for example in the triangle below, if a point had a coordinate of alpha = 1, beta = 0, and gamma = 0, the sampled point could be an all red point since barycentric coordinates let us sample for a color or texture. Another example is that if we had alpha, beta, gamma = (0.5,0.5,0), we might sample purple at these barycentric coordinates since the value of alpha, beta, gamma can be thought of as how close we are to the corresponding vertice. 
 				<figure>
 					<img src="Barycentric.png" width="400px" />
 				</figure>
