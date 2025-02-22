@@ -89,6 +89,8 @@
 			<h2>Task 2: Antialiasing by Supersampling</h2>
 			In order to implement super sampling up to a sample rate of 16, we took advantage of a sample buffer. By scaling the sample buffer, we can take an input triangle, and effectively sample sub-pixels inside of each real pixel location. Unlike the basic case where we would sample the exact center of each pixel in a 1:1 ratio between the sample buffer and the frame buffer, we introduce two new parameters, dx and dy. Thus, we can test sub-pixel locations in a grid of sqrt(sample rate) x sqrt(sample rate). Take a sample rate of 16 for example, we could add dx and dy increments on top of each (x, y) pixel to test a 4 x 4 grid of sub pixels, and mark their locations in our sample buffer. In this case, our sample buffer would be 16 times as long, so that we could store 16 sub pixels for every 1 input pixel. After sampling all sub pixels, we resolve the sample buffer into our frame buffer by iterating through all the 16 pixel groupings, and downsample all of the sub pixels into a single pixel location via averaging. This effectively smoothes out locations with high frequency changes by spreading out that change in color over more pixels.
 
+			This task's largest challenge was understanding how scaling our sample buffer would make it possible to average our colors in each pixel. We started by attempting to average each coordinates' sub pixels before moving on, however this caused strange artefacts in cases where triangles were bordering. While individual triangles surrounded by background were anti-aliased fine, there were some collision issues were bordering triangles inside a pixel could not "communicate" that they were going to partially color a fraction of the pixel one color. This meant entire sections of pixels were left uncolored when new triangles overwrote the work of previous triangles. In order to super sample effectively, we had to collect all colors in the sample buffer first, where we could then work our way down.
+
 			<div style="display: flex; flex-direction: column; align-items: center;">
 				<table style="width: 100%; text-align: center; border-collapse: collapse;">
 					<tr>
@@ -108,7 +110,7 @@
 						</td>
 						<td style="text-align: center;">
 							<img src="T2 16.png" width="400px" />
-							<figcaption>Super sampled to full sample rate of 4.</figcaption>
+							<figcaption>Super sampled to full sample rate of 16.</figcaption>
 						</td>
 					</tr>
 				</table>
