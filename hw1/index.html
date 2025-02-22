@@ -48,7 +48,7 @@
 	-->
 
 			<h2>Overview</h2>
-			Give a high-level overview of what you implemented in this homework. Think about what you've built as a whole. Share your thoughts on what interesting things you've learned from completing the homework.
+			In this project we impleted rasterizing of triangles, supersampling, transformations, barycentric coordinates, pixel sampling for texture mapping, and level sampling with mipmaps for texture mapping. The end result allows us to take images and perform all our implementations on them, for example we had a picture of a few triangles which we rasterized and were blurry, but after implementing supersampling at sampling at a higher rate, the jaggies faded off. There was a image of a robot that we used our transforms implementations on to change the orientations, location, and scale of its body. After we implemented barycentric coordinates, we used them for texture sampling to get nice images of things like a world map, a parrot, and the Campanile.
 
 			<h2>Task 1: Drawing Single-Color Triangles</h2>
 			Rasterizing triangles in the simple case took three line tests. With three points as inputs to represent the vertices of a triangle, we can define a bounding box from the top-most, left-most to bottom-most, right-most point. We also define the edges of the triangle as the pairwise coordinates of two adjacent vertices. We can then iterate through every sample midpoint (x, y) + (0.5, 0.5) and perform cross-product line direction tests to see if the point is always on the left of the three given triangle lines (or always on the right, for clockwise-oriented triangles). If true, then we know the sample point is within the edges of the triangle, and can be rasterized via coloration of the pixel.
