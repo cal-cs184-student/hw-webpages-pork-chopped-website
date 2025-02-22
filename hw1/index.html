@@ -148,7 +148,7 @@
 
 			<br>
 
-			Level 0 sampling is the fastest as it takes no extra computing, and also uses the least memory since it only uses the level 0 mipmap. However, it has the highest aliasing due to direct texel selection even if there are distorted pixels. Nearest level sampling is slightly slower than the previous due to the mipmap level calculations based on the uv offsets, and also has some extra memory usage to generate the mipmaps, but with some anti-aliasing for triangles that are smaller and make be distorted. Beyond that, trilinear filtering is the slowest due to the calculations of two adjacent mipmap levels, but doesn't require extra memory than what is already calculated by nearest level, and has the best anti-aliasing as it also blends the textures between two mipmap levels where there may be sharp warps.'
+			Level 0 sampling is the fastest as it takes no extra computing, and also uses the least memory since it only uses the level 0 mipmap. However, it has the highest aliasing due to direct texel selection even if there are distorted pixels. Nearest level sampling is slightly slower than the previous due to the mipmap level calculations based on the uv offsets, and also has some extra memory usage to generate the mipmaps, but with some anti-aliasing for triangles that are smaller and make be distorted. Beyond that, trilinear filtering is the slowest due to the calculations of two adjacent mipmap levels, but doesn't require extra memory than what is already calculated by nearest level, and has the best anti-aliasing as it also blends the textures between two mipmap levels where there may be sharp warps.
 
 			<div style="display: flex; flex-direction: column; align-items: center;">
 				<table style="width: 100%; text-align: center; border-collapse: collapse;">
@@ -184,17 +184,7 @@
 			<h2>(Optional) Task 7: Extra Credit - Draw Something Creative!</h2>
 			Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
-			<h2>Additional Notes (please remove)</h2>
-			<ul>
-				<li>You can also add code if you'd like as so: <code>code code code</code></li>
-				<li>
-					If you'd like to add math equations,
-					<ul>
-						<li>You can write inline equations like so: \( a^2 + b^2 = c^2 \)</li>
-						<li>You can write display equations like so: \[ a^2 + b^2 = c^2 \]</li>
-					</ul>
-				</li>
-			</ul>
+			
 		</div>
 	</body>
 </html>
