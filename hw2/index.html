@@ -109,7 +109,6 @@
 			<h2>Section II: Triangle Meshes and Half-Edge Data Structure</h2>
 
 			<h3>Part 3: Area-weighted vertex normals</h3>
-			Briefly explain how you implemented the area-weighted vertex normals.
 			How we implemented the area-weighted vertex normals was by starting from our half edge, and then while moving to every other half edge, we grabbed the locations of the three vertices that make up the triangle that the current half edge belongs to, with these vertices, we could do subtraction to end up with vectors for the base and height of the triangles, we also grabbed the normal vector of each face since it is a member variable of the halfedge's face. Using the cross product and normalization, we calculate the area of the triangle and since we already have the normal vector we just multiply the area by this normal vector to weight the area by the normal, by doing this for all halfedges we get a sum of weighted areas. All we have to do afterwards is return the normalized sum to get the approximate unit normal.
 
 			<div style="display: flex; flex-direction: column; align-items: center;">
