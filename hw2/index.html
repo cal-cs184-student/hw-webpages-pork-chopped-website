@@ -188,7 +188,13 @@
 			</div>
 
 			<h3>Part 6: Loop subdivision for mesh upsampling</h3>
-			Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+				
+			To implement Loop subdivision for mesh upsampling, we first iterated over all vertices to calculate a new position for each vertex based on the subdivision rule, for a vertex we calculate a weight u which is 3/16 if the vertex has 3 neighbors, otherwise u = (3/8n) where n is the number of neighbors that the vertex has. We then sum the positions of the neighboring vertices and assign the vertex a new position as a weighted average of the original position and the sum of the neighboring positions. We also had to set the vertex's isNew variable to false since this is an old point
+			Next we had to calculate new positions for every edge. We did this through using a weighted average of the endpoints of each edge and the opposing vertices in the adjacent faces, we then store the new position of this edge on the edge itself. We then set the isNew variable for this edge to false since it is a current edge.
+			Then, we split every edge in the original mesh while avoiding splitting on new edges to avoid infinite loops. We do this by inserting a new vertex at each calculated edge position, we set each of these new vertices' isNew to true.
+			We then want to flip any edge that connects a new vertex to an old vertex, and finally we just update the vertices of the mesh using the original and new vertices.
+			In general, after loop subdivision, meshes tend to look more smooth and rounder, but sharp corners and edges still remain, as an example in the third case we tried to split on the creased edges on the cube, but after upsampling we see that these new edge vertices tend to become sharp points in the mesh. In the better second case, all symmetric edges are along faces or along edges rather than across sharp corners.
+			
 
 			<div style="display: flex; flex-direction: column; align-items: center;">
 				<table style="width: 100%; text-align: center; border-collapse: collapse;">
