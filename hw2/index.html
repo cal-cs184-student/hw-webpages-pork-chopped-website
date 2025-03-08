@@ -49,7 +49,7 @@
 
 			<h2>Overview</h2>
 			In this homework, we implemented code to linearly interpolate control points in the form of Bezier curves using de Casteljau's algorithm. We then extended it to Bezier surfaces where we interpolate along a value u first, then with each of the resulting Bezier curves giving us a point, we can interpolate on these new points using a new value v. We then implemented area-weighted vertex normals to apply shading such as Phong shading on to a teapot. We then implemented edge-flips and edge-splits which act as fundamental helper functions for our final upsampling method which allows us to uniformly add new vertices that makes the model appear higher resolution and gives us more precise texture, shading, and physics manipulation.
-			During our homework something we found interesting was that sometimes using more than 1 pre-split made the after upsampling image appeared with more bulges compared to just 1 pre-split.
+			During our homework something we found interesting was that sometimes using more than 1 pre-split made the after upsampling image appeared with more bulges compared to just 1 pre-split. It's important to pay close attention to have sharp edges and creases cause strange patterns such as points or warping to occur when upsampling!
 
 			<h2>Section I: Bezier Curves and Surfaces</h2>
 
