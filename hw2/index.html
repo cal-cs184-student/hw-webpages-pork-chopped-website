@@ -128,11 +128,6 @@
 
 
 			<h3>Part 4: Edge flip</h3>
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
->>>>>>> 19be6134f4f08943c4b25888ce8050aa8c0afbd1
 			To implement the edge flip operation, we first saved everything our current state which included all the half edges, all the vertices, all the edges, and all the faces. Then using the setNeighbors method we changed all the member variables of each half edge, so according to a drawing of the two triangles we made, we set the next, twin, vertex, edge, and face for every halfedge that we saved. Afterwards we set all the halfedge pointers in the faces, edges, and vertices we saved to a working and valid halfedge accoridng to our drawing, we then just simply return the original edge we were given which is now properly flipped.
 
 			<div style="display: flex; flex-direction: column; align-items: center;">
@@ -162,11 +157,8 @@
 			</div>
 
 			<h3>Part 5: Edge split</h3>
-
 			Our edge split algorithm builds upon the same process as edge flips, except we not only reassign but also add new pointers (for the new faces, vertices, and edges). In particular, splitting the median line turns it into a cross of four edges (but only three are new because the original middle line can be reassigned to be one of the four edges of the cross). We followed the same naming scheme for the outer halfedges, and added six new inner half edges, three new inner edges, two new inner faces, and one new midpoint vertex.
-
 			After drawing a new diagram for edge split, we decided to turn the middle line into the upper middle line after the middle edge is split. From there, the three new edges (and their six halfedges) go left, right, and down from the new mid point (which is weighted between the top and bottom original vertices). The original two faces are designated to the top two faces, and the two new faces are assigned to the bottom faces of the cross. Minimizing the changes from the edge split code made it easier to double-check our pointer assignments!
-
 			Debugging edge split was not as bad as edge flip after we understood the general workflow. The biggest hiccup came when we were calculating the mid point position, as we were trying to average between all four outer vertices, when we only had to consider vertices B and C. Small errors in setting the mesh neighbors also arose due to rushing the diagram reading, which caused the splits to sometimes delete entire faces.
 
 			<div style="display: flex; flex-direction: column; align-items: center;">
