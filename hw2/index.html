@@ -54,44 +54,44 @@
 
 			<h3>Part 1: Bezier curves with 1D de Casteljau subdivision</h3>
 			de Casteljaus algorithm is basically just using lerps on the edges between control points, since we have n - 1 edges, each level of the algorithm gives us one less point, we connect the edges on a parameter t that indicates how far along the edge we lerp on. We essentially lerp until we are left with one point, this point acts as our tracer for our bezier curve, as we change t from 0 to 1, we use our tracer point to draw out the bezier curve along all possible values of t.
-			How we implemented it was by first implementing 1 step of de Casteljau's algorithm which is just a single lerp stage using the formula (1-t)P<sub>i</sub> + t p<sub>i+1</sub>. we do the on the first n-1 control points so that on our last call we don't get an out of bounds error, doing this step gives us new n-1 control points, so by repeating this this until we end up with only a singular point, we can get a tracer point that draws the bezier curve along the values of all t.'
+			How we implemented it was by first implementing 1 step of de Casteljau's algorithm which is just a single lerp stage using the formula (1-t)P<sub>i</sub> + t p<sub>i+1</sub>. we do the on the first n-1 control points so that on our last call we don't get an out of bounds error, doing this step gives us new n-1 control points, so by repeating this this until we end up with only a singular point, we can get a tracer point that draws the bezier curve along the values of all t.
 
 			<div style="display: flex; flex-direction: column; align-items: center;">
 				<table style="width: 100%; text-align: center; border-collapse: collapse;">
 					<tr>
 						<td style="text-align: center;">
 							<img src="Bezier1.PNG" width="400px" />
-							<figcaption>Caption goes here.</figcaption>
+							<figcaption>Step 1.</figcaption>
 						</td>
 						<td style="text-align: center;">
 							<img src="bezier2.PNG" width="400px" />
-							<figcaption>Caption goes here.</figcaption>
+							<figcaption>Step 2.</figcaption>
 						</td>
 					</tr>
 					<tr>
 						<td style="text-align: center;">
 							<img src="bezier3.PNG" width="400px" />
-							<figcaption>Caption goes here.</figcaption>
+							<figcaption>Step 3.</figcaption>
 						</td>
 						<td style="text-align: center;">
 							<img src="bezier4.PNG" width="400px" />
-							<figcaption>Caption goes here.</figcaption>
+							<figcaption>Step 4.</figcaption>
 						</td>
 					</tr>
 					<tr>
 						<td style="text-align: center;">
 							<img src="bezier5.PNG" width="400px" />
-							<figcaption>Caption goes here.</figcaption>
+							<figcaption>Step 5.</figcaption>
 						</td>
 						<td style="text-align: center;">
 							<img src="bezier6.PNG" width="400px" />
-							<figcaption>Caption goes here.</figcaption>
+							<figcaption>Final Step.</figcaption>
 						</td>
 					</tr>
 					<tr>
 						<td style="text-align: center;">
 							<img src="otherbezier.PNG" width="400px" />
-							<figcaption>Caption goes here.</figcaption>
+							<figcaption>Slightly Different Bezier curve with different value of t.</figcaption>
 						</td>
 					</tr>
 				</table>
