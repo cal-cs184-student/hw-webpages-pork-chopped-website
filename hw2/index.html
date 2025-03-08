@@ -99,7 +99,7 @@
 			</div>
 
 			<h3>Part 2: Bezier surfaces with separable 1D de Casteljau</h3>
-			de Casteljau algorithm extends to Bezier surfaces by first making bezier curves along one direction first such as along the x axis first and by doing it on some parameter u, we get 1 control point per bezier curve which results in n control point, 1 from each of the n bezier curves, we then run de Casteljau algorithm on these n points with a second parameter v in order to give us a bezier surface.
+			de Casteljau algorithm extends to Bezier surfaces by first making bezier curves along one direction first such as along the x axis first and by doing it on some parameter u, we get 1 control point per bezier curve which results in n control points, 1 from each of the n bezier curves, we then run de Casteljau algorithm on these n points with a second parameter v in order to give us a bezier surface.
 			The way we implemented this was by first iterating through each of the n rows which had m control points each and running de Casteljau algorithm on these m points along the parameter u to end up with n curves and n points, and then using our second parameter v, we make a new bezier curve with the n points as control points and v as the parameter to describe a point on the Bezier surface.
 			<figure>
 				<img src="task2.PNG" alt="Teapot" style="width:50%" />
