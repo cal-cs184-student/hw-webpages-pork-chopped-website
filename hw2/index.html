@@ -48,7 +48,8 @@
 	-->
 
 			<h2>Overview</h2>
-			Give a high-level overview of what you implemented in this homework. Think about what you've built as a whole. Share your thoughts on what interesting things you've learned from completing the homework.
+			In this homework, we implemented code to linearly interpolate control points in the form of Bezier curves using de Casteljau's algorithm. We then extended it to Bezier surfaces where we interpolate along a value u first, then with each of the resulting Bezier curves giving us a point, we can interpolate on these new points using a new value v. We then implemented area-weighted vertex normals to apply shading such as Phong shading on to a teapot. We then implemented edge-flips and edge-splits which act as fundamental helper functions for our final upsampling method which allows us to uniformly add new vertices that makes the model appear higher resolution and gives us more precise texture, shading, and physics manipulation.
+			During our homework something we found interesting was that sometimes using more than 1 pre-split made the after upsampling image appeared with more bulges compared to just 1 pre-split.
 
 			<h2>Section I: Bezier Curves and Surfaces</h2>
 
@@ -98,7 +99,6 @@
 			</div>
 
 			<h3>Part 2: Bezier surfaces with separable 1D de Casteljau</h3>
-			Briefly explain how de Casteljau algorithm extends to Bezier surfaces and how you implemented it in order to evaluate Bezier surfaces.
 			de Casteljau algorithm extends to Bezier surfaces by first making bezier curves along one direction first such as along the x axis first and by doing it on some parameter u, we get 1 control point per bezier curve which results in n control point, 1 from each of the n bezier curves, we then run de Casteljau algorithm on these n points with a second parameter v in order to give us a bezier surface.
 			The way we implemented this was by first iterating through each of the n rows which had m control points each and running de Casteljau algorithm on these m points along the parameter u to end up with n curves and n points, and then using our second parameter v, we make a new bezier curve with the n points as control points and v as the parameter to describe a point on the Bezier surface.
 			<figure>
