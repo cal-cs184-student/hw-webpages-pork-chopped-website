@@ -127,18 +127,75 @@
 			</div>
 
 
-					<h3>Part 4: Edge flip</h3>
-					Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+			<h3>Part 4: Edge flip</h3>
+			Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
-					<h3>Part 5: Edge split</h3>
-					Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
-					<h3>Part 6: Loop subdivision for mesh upsampling</h3>
-					Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
-					<h2>(Optional) Section III: Potential Extra Credit - Art Competition: Model something Creative</h2>
-					Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
+			<div style="display: flex; flex-direction: column; align-items: center;">
+				<table style="width: 100%; text-align: center; border-collapse: collapse;">
+					<tr>
+						<td style="text-align: center;">
+							<img src="Task4 unflipped.png" width="400px" />
+							<figcaption>Default unflipped teapot.</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="Task4 One Flip.png" width="400px" />
+							<figcaption>One diagonal flipped.</figcaption>
+						</td>
+						
+					</tr>
+					<tr>
+						<td style="text-align: center;">
+							<img src="Task4 Several Flip.png" width="400px" />
+							<figcaption>Several diagnolas flipped.</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="EdgeFlip.jpg" width="400px" />
+							<figcaption>Diagram of EdgeFlip algorithm.</figcaption>
+						</td>
+					</tr>
+				</table>
 			</div>
+
+			<h3>Part 5: Edge split</h3>
+
+			Our edge split algorithm builds upon the same process as edge flips, except we not only reassign but also add new pointers (for the new faces, vertices, and edges). In particular, splitting the median line turns it into a cross of four edges (but only three are new because the original middle line can be reassigned to be one of the four edges of the cross). We followed the same naming scheme for the outer halfedges, and added six new inner half edges, three new inner edges, two new inner faces, and one new midpoint vertex.
+
+			After drawing a new diagram for edge split, we decided to turn the middle line into the upper middle line after the middle edge is split. From there, the three new edges (and their six halfedges) go left, right, and down from the new mid point (which is weighted between the top and bottom original vertices). The original two faces are designated to the top two faces, and the two new faces are assigned to the bottom faces of the cross. Minimizing the changes from the edge split code made it easier to double-check our pointer assignments!
+
+			Debugging edge split was not as bad as edge flip after we understood the general workflow. The biggest hiccup came when we were calculating the mid point position, as we were trying to average between all four outer vertices, when we only had to consider vertices B and C. Small errors in setting the mesh neighbors also arose due to rushing the diagram reading, which caused the splits to sometimes delete entire faces.
+
+			<div style="display: flex; flex-direction: column; align-items: center;">
+				<table style="width: 100%; text-align: center; border-collapse: collapse;">
+					<tr>
+						<td style="text-align: center;">
+							<img src="Task5 Unsplit.png" width="400px" />
+							<figcaption>Default unsplit teapot mesh.</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="Task5 Vertical Split and Flip.png" width="400px" />
+							<figcaption>Edges flipped along one vertical line, and split on the other side.</figcaption>
+						</td>
+						
+					</tr>
+					<tr>
+						<td style="text-align: center;">
+							<img src="Task5 Several Split and Flip.png" width="400px" />
+							<figcaption>Combination of edge flips and splits on the same edges.</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="EdgeSplit.jpg" width="400px" />
+							<figcaption>Diagram of EdgeSplit algorithm.</figcaption>
+						</td>
+					</tr>
+				</table>
+			</div>
+
+			<h3>Part 6: Loop subdivision for mesh upsampling</h3>
+			Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+			<h2>(Optional) Section III: Potential Extra Credit - Art Competition: Model something Creative</h2>
+			Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+		</div>
 </body>
 </html>
