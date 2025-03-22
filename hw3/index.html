@@ -100,7 +100,7 @@
 			<p>We then used the ray-plane intersection algorithm from lecture to determine when input rays would intersect the x, y, and z axes of a bounding box, and update the most restrictive time values (tightest bounds of all axes combined) if there is a valid intersection.</p>
 			<p>Finally, we could short circuit if we notice there are no valid intersections with the bounding box. Otherwise, if the node is a leaf, we can iterate through the primitives (like triangles) to individually calculate their ray intersections; if the node is a parent then we check if the children nodes contain valid intersections, until we reach the leaf case (or until it short circuits).</p>
 			<p>The heuristic we chose, going off the widest extents of each axis, felt like a good compromise between familiarity and efficiency. In the case where splitting by the widest extent along the split point does not return two partitions, we fall back on a median split as a failsafe to infinite loops. The widest extent approach mimics the median line, but incorporates some context from the bounding box to make what is likely a good estimator of a balanced split between primitives, without having to calculate average centroid positions or surface areas (although these are other approaches valid from lecture).</p>
-			<p>Here are some complex meshes and comparisons of how their renders perform on a single-threaded i7-12700H with 480000 rays tested.</p>
+			<p>Here are some complex meshes and comparisons of how their renders perform with and without BVH acceleration on a single-threaded i7-12700H with 480000 rays tested.</p>
 
 			<div style="display: flex; flex-direction: column; align-items: center;">
 				<table style="width: 100%; text-align: center; border-collapse: collapse;">
@@ -111,23 +111,23 @@
 						</td>
 						<td style="text-align: center;">
 							<img src="building_screenshot_3-22_12-52-51.png" width="400px" />
-							<figcaption>Least complex of the four intense models a building - 39506 primitives.</figcaption>
+							<figcaption>First somewhat complex model, a building - 39506 primitives.</figcaption>
 						</td>
 					</tr>
 					<tr>
 						<td style="text-align: center;">
 							<img src="maxplanck_screenshot_3-22_12-51-51.png" width="400px" />
-							<figcaption>A similarly complex bust of Max Planck - 50801 primitives.</figcaption>
+							<figcaption>A bust of Max Planck - 50801 primitives.</figcaption>
 						</td>
 						<td style="text-align: center;">
 							<img src="dragon_screenshot_3-22_12-50-41.png" width="400px" />
-							<figcaption>A dragon - 105120 primitives</figcaption>
+							<figcaption>A frightening dragon - 105120 primitives.</figcaption>
 						</td>
 					</tr>
 					<tr>
 						<td style="text-align: center;">
 							<img src="CBlucy_screenshot_3-22_12-52-29.png" width="400px" />
-							<figcaption>A devastating render of Lucy, capturing 133796 primitives!</figcaption>
+							<figcaption>A devastating render of Lucy - 133796 primitives!</figcaption>
 						</td>
 					</tr>
 				</table>
@@ -135,12 +135,12 @@
 
 			<!--Tables AI generated based off of collected data, tables get their own element type before headers and data are declared-->
 			<!-- Render Time Table -->
-			<h2>Render Time</h2>
+			<h2>Total Render Time</h2>
 			<table>
 				<tr>
 					<th>Filenames</th>
-					<th>Data w/ BVH (s)</th>
-					<th>Data w/out BVH (s)</th>
+					<th>Time w/ BVH (sec)</th>
+					<th>Time w/out BVH (sec)</th>
 				</tr>
 				<tr>
 					<td>Cow</td>
@@ -174,8 +174,8 @@
 			<table>
 				<tr>
 					<th>Filenames</th>
-					<th>Data w/ BVH (million rays/sec)</th>
-					<th>Data w/out BVH (million rays/sec)</th>
+					<th>Rendering w/ BVH (million rays/sec)</th>
+					<th>Rendering w/out BVH (million rays/sec)</th>
 				</tr>
 				<tr>
 					<td>Cow</td>
@@ -209,8 +209,8 @@
 			<table>
 				<tr>
 					<th>Filenames</th>
-					<th>Data w/ BVH</th>
-					<th>Data w/out BVH</th>
+					<th>Intersection Checks w/ BVH</th>
+					<th>Intersection Checks w/out BVH</th>
 				</tr>
 				<tr>
 					<td>Cow</td>
@@ -356,31 +356,6 @@
 	[PathTracer] Average speed 0.0003 million rays per second.
 	[PathTracer] Averaged 133796.000000 intersection tests per ray.
 	[PathTracer] Saving to file: CBlucy_screenshot_3-22_14-13-36.png... Done!-->
-
-			<div style="display: flex; flex-direction: column; align-items: center;">
-				<table style="width: 100%; text-align: center; border-collapse: collapse;">
-					<tr>
-						<td style="text-align: center;">
-							<img src="P1.1.png" width="400px" />
-							<figcaption>An empty room of made of triangles.</figcaption>
-						</td>
-						<td style="text-align: center;">
-							<img src="P1.2.png" width="400px" />
-							<figcaption>The same room but now with two spheres.</figcaption>
-						</td>
-					</tr>
-					<tr>
-						<td style="text-align: center;">
-							<img src="P1.3.png" width="400px" />
-							<figcaption>A banana mesh on a pedastal.</figcaption>
-						</td>
-						<td style="text-align: center;">
-							<img src="P1.4.png" width="400px" />
-							<figcaption>A cute cow figure.</figcaption>
-						</td>
-					</tr>
-				</table>
-			</div>
 
 			<h2>Part 3: Direct Illumination</h2>
 			Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
