@@ -23,6 +23,24 @@
 			body {
 				font-family: 'Inter', sans-serif;
 			}
+/*AI helped generate table style*/
+            table {
+                border-collapse: collapse;
+                margin-bottom: 20px;
+            }
+
+            table, th, td {
+                border: 1px solid #333;
+            }
+
+            th, td {
+                padding: 8px 12px;
+                text-align: center;
+            }
+
+            h2 {
+                margin-bottom: 5px;
+            }
 		</style>
 	</head>
 	<body>
@@ -51,6 +69,7 @@
 			<p>* Task 1.1: Ray generation is a fundamental piece of intersection-based light algorithms. Given a normalized (x,y) in image space [0,0]:[1,1] that we would like convert into world space, we first convert from image space to camera space defaulted to facing the z-axis [-tan(0.5*hFov),-tan(0.5*vFov),-1]:[tan(0.5*hFov),tan(0.5*vFov),-1]. This is processed by re-centering the origin in image space before converting the hFov and vFov into radians and calculating the camera space coordinates. From there, we apply the camera to world rotation matrix to convert into the world space. Finally, we normalize the ray direction in world space, and return a ray starting at the camera's position in world space, and with generic nClip and fClip boundaries for time.</p>
 			<p>* Task 1.2: We also had to implement generation of pixel samples. We initialized a "bucket" to later collect radiance values. For the desired number of samples, we generate a sample by adding a unit sample of a 1x1 pixel on top of the (x,y) coordinate, and then add our estimated radiance to our bucket. After looping is complete, we average down and update our sampleBuffer to reflect the expected pixel global illumination radiance.</p>
 			<p>* Task 1.3 + 1.4: Now with rays prepared, we could implement the first intersection algorithm. In the triangle-ray intersection case, we have two functions to check if there's an intersection, and another to update the relevant intersection structure if so. However, the two are practically the same, minus the updates in the former, so the overall approach follows this process: Following the <b>Moller Trumbore</b> Alorithm from lecture, we could more efficiently calculate the barycentric coordinates of an intersection point within the triangle! Essentially, the formulae have you take the triangle's points and the ray, define the edges of the triangle, shift the ray's origin to the first point, and then use cross-products to determine scaling factors for the barycentric coordinates. we then normalize the time of intersection, and two of the barycentric coordinates, by dividing by the determinant. Afterwards, we use the determinant and calculated b1 and b2 coordinate values to check the intersection is valid (not through an edge or out of time bounds). We can then update the intersection structure accordingly! After triangles, we added sphere-intersection via its own specific formulae from lecture.</p>
+			<p>Here are some images rendered with normal shading.</p>
 			<div style="display: flex; flex-direction: column; align-items: center;">
 				<table style="width: 100%; text-align: center; border-collapse: collapse;">
 					<tr>
@@ -77,7 +96,291 @@
 			</div>
 
 			<h2>Part 2: Bounding Volume Hierarchy</h2>
-			Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+			<p>Bounding Volume Hierarchies are a recursive method to split a mesh into successively small but efficiently rendered boxes. Instead of calculating every ray, we can determine whether the ray intersects a general box around the mesh, and if that doesn't short circuit, check if the primitives are within reasonable time frames based on previous intersections and ray positions. We constructed our BVH by adding primitives to an overall bounding box, and then working down we define the split points of inner bounding volumes by the "widest" axis based on each axis's extent (difference between max and min points) We then used AI to help us code an iterative splitter of all the primitives into their respective partitions on either side of the split point. We then successively continue to construct further "left" and "right" inner bounding volumes on the two sides we just split.</p>
+			<p>We then used the ray-plane intersection algorithm from lecture to determine when input rays would intersect the x, y, and z axes of a bounding box, and update the most restrictive time values (tightest bounds of all axes combined) if there is a valid intersection.</p>
+			<p>Finally, we could short circuit if we notice there are no valid intersections with the bounding box. Otherwise, if the node is a leaf, we can iterate through the primitives (like triangles) to individually calculate their ray intersections; if the node is a parent then we check if the children nodes contain valid intersections, until we reach the leaf case (or until it short circuits).</p>
+			<p>The heuristic we chose, going off the widest extents of each axis, felt like a good compromise between familiarity and efficiency. In the case where splitting by the widest extent along the split point does not return two partitions, we fall back on a median split as a failsafe to infinite loops. The widest extent approach mimics the median line, but incorporates some context from the bounding box to make what is likely a good estimator of a balanced split between primitives, without having to calculate average centroid positions or surface areas (although these are other approaches valid from lecture).</p>
+			<p>Here are some complex meshes and comparisons of how their renders perform on a single-threaded i7-12700H with 480000 rays tested.</p>
+
+			<div style="display: flex; flex-direction: column; align-items: center;">
+				<table style="width: 100%; text-align: center; border-collapse: collapse;">
+					<tr>
+						<td style="text-align: center;">
+							<img src="cow_screenshot_3-22_14-16-0.png" width="400px" />
+							<figcaption>Relatively low complexity cow - 5856 primitives.</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="building_screenshot_3-22_12-52-51.png" width="400px" />
+							<figcaption>Least complex of the four intense models a building - 39506 primitives.</figcaption>
+						</td>
+					</tr>
+					<tr>
+						<td style="text-align: center;">
+							<img src="maxplanck_screenshot_3-22_12-51-51.png" width="400px" />
+							<figcaption>A similarly complex bust of Max Planck - 50801 primitives.</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="dragon_screenshot_3-22_12-50-41.png" width="400px" />
+							<figcaption>A dragon - 105120 primitives</figcaption>
+						</td>
+					</tr>
+					<tr>
+						<td style="text-align: center;">
+							<img src="CBlucy_screenshot_3-22_12-52-29.png" width="400px" />
+							<figcaption>A devastating render of Lucy, capturing 133796 primitives!</figcaption>
+						</td>
+					</tr>
+				</table>
+			</div>
+
+			<!--Tables AI generated based off of collected data, tables get their own element type before headers and data are declared-->
+			<!-- Render Time Table -->
+			<h2>Render Time</h2>
+			<table>
+				<tr>
+					<th>Filenames</th>
+					<th>Data w/ BVH (s)</th>
+					<th>Data w/out BVH (s)</th>
+				</tr>
+				<tr>
+					<td>Cow</td>
+					<td>0.1489</td>
+					<td>28.2115</td>
+				</tr>
+				<tr>
+					<td>Building</td>
+					<td>0.1202</td>
+					<td>213.7916</td>
+				</tr>
+				<tr>
+					<td>MaxPlanck</td>
+					<td>0.2291</td>
+					<td>390.0616</td>
+				</tr>
+				<tr>
+					<td>Dragon</td>
+					<td>0.2466</td>
+					<td>1385.3387</td>
+				</tr>
+				<tr>
+					<td>CBlucy</td>
+					<td>0.2529</td>
+					<td>1863.7182</td>
+				</tr>
+			</table>
+
+			<!-- Rays per Second Table -->
+			<h2>Rays per Second</h2>
+			<table>
+				<tr>
+					<th>Filenames</th>
+					<th>Data w/ BVH (million rays/sec)</th>
+					<th>Data w/out BVH (million rays/sec)</th>
+				</tr>
+				<tr>
+					<td>Cow</td>
+					<td>3.2244</td>
+					<td>0.0170</td>
+				</tr>
+				<tr>
+					<td>Building</td>
+					<td>3.9930</td>
+					<td>0.0022</td>
+				</tr>
+				<tr>
+					<td>MaxPlanck</td>
+					<td>2.0952</td>
+					<td>0.0012</td>
+				</tr>
+				<tr>
+					<td>Dragon</td>
+					<td>1.9464</td>
+					<td>0.0003</td>
+				</tr>
+				<tr>
+					<td>CBlucy</td>
+					<td>1.8980</td>
+					<td>0.0003</td>
+				</tr>
+			</table>
+
+			<!-- Tests per Ray Table -->
+			<h2>Tests per Ray</h2>
+			<table>
+				<tr>
+					<th>Filenames</th>
+					<th>Data w/ BVH</th>
+					<th>Data w/out BVH</th>
+				</tr>
+				<tr>
+					<td>Cow</td>
+					<td>3.565354</td>
+					<td>5856.000000</td>
+				</tr>
+				<tr>
+					<td>Building</td>
+					<td>1.419775</td>
+					<td>39506.000000</td>
+				</tr>
+				<tr>
+					<td>MaxPlanck</td>
+					<td>4.316633</td>
+					<td>50801.000000</td>
+				</tr>
+				<tr>
+					<td>Dragon</td>
+					<td>3.493762</td>
+					<td>105120.000000</td>
+				</tr>
+				<tr>
+					<td>CBlucy</td>
+					<td>3.574988</td>
+					<td>133796.000000</td>
+				</tr>
+			</table>
+
+			<p>The implementation of bounding volume hierarchies to the ray intersection rendering drastically impacts performance! For the simple cow model, the rendering was sped up 189.46 times, but with the Lucy statue rendering reached a staggering 7369.39 times acceleration! This pattern of increasing improvement is seen with ray/sec renders with of 189.67 and 6326.66 times acceleration respectively, which is slightly off due to data rounding. Most impressively, we can see the reason for the observed improvement by analyzing the intersection tests actually computed per ray, with the cow only testing 0.0609% and the lucy statue testing only 0.0027% of the total intersections the non-BVH algorithm tested. With short-circuiting, we have avoided having to test every primitive for every ray generated, only calculating a couple box intersections per ray to narrow it down to the handful of lead nodes and primitives for rendering! This cuts out naive intersection tests with primitives that would otherwise be obviously unlikely to hit all triangles and primitives in the mesh, thus the fraction of actual intersection tests, and cutting down compute time especially for complex models where BVH most effectively can eliminate nodes by entire sections proportionally.</p>
+
+			<!--BVH Enabled: 3b0f77c9348af1fcdc680611e1d1fc7fa89efa71
+
+	Cow:
+	[PathTracer] Input scene file: ../../../dae/meshedit/cow.dae
+	[PathTracer] Rendering using 1 threads
+	[PathTracer] Collecting primitives... Done! (0.0009 sec)
+	[PathTracer] Building BVH from 5856 primitives... Done! (0.0035 sec)
+	[PathTracer] Rendering... 100%! (0.1489s)
+	[PathTracer] BVH traced 480000 rays.
+	[PathTracer] Average speed 3.2244 million rays per second.
+	[PathTracer] Averaged 3.565354 intersection tests per ray.
+	[PathTracer] Saving to file: cow_screenshot_3-22_14-16-0.png... Done!
+
+	Building:
+	[PathTracer] Input scene file: ../../../dae/keenan/building.dae
+	[PathTracer] Rendering using 1 threads
+	[PathTracer] Collecting primitives... Done! (0.0061 sec)
+	[PathTracer] Building BVH from 39506 primitives... Done! (0.0167 sec)
+	[PathTracer] Rendering... 100%! (0.1202s)
+	[PathTracer] BVH traced 480000 rays.
+	[PathTracer] Average speed 3.9930 million rays per second.
+	[PathTracer] Averaged 1.419775 intersection tests per ray.
+	[PathTracer] Saving to file: building_screenshot_3-22_12-52-51.png... Done!
+
+	MaxPlanck:
+	[PathTracer] Input scene file: ../../../dae/meshedit/maxplanck.dae
+	[PathTracer] Rendering using 1 threads
+	[PathTracer] Collecting primitives... Done! (0.0071 sec)
+	[PathTracer] Building BVH from 50801 primitives... Done! (0.0173 sec)
+	[PathTracer] Rendering... 100%! (0.2291s)
+	[PathTracer] BVH traced 480000 rays.
+	[PathTracer] Average speed 2.0952 million rays per second.
+	[PathTracer] Averaged 4.316633 intersection tests per ray.
+	[PathTracer] Saving to file: maxplanck_screenshot_3-22_12-51-51.png... Done!
+
+	Dragon:
+	[PathTracer] Input scene file: ../../../dae/sky/dragon.dae
+	[PathTracer] Rendering using 1 threads
+	[PathTracer] Collecting primitives... Done! (0.0186 sec)
+	[PathTracer] Building BVH from 105120 primitives... Done! (0.0599 sec)
+	[PathTracer] Rendering... 100%! (0.2466s)
+	[PathTracer] BVH traced 480000 rays.
+	[PathTracer] Average speed 1.9464 million rays per second.
+	[PathTracer] Averaged 3.493762 intersection tests per ray.
+	[PathTracer] Saving to file: dragon_screenshot_3-22_12-50-41.png... Done!
+
+	CBlucy:
+	[PathTracer] Input scene file: ../../../dae/sky/CBlucy.dae
+	[PathTracer] Rendering using 1 threads
+	[PathTracer] Collecting primitives... Done! (0.0219 sec)
+	[PathTracer] Building BVH from 133796 primitives... Done! (0.0580 sec)
+	[PathTracer] Rendering... 100%! (0.2529s)
+	[PathTracer] BVH traced 480000 rays.
+	[PathTracer] Average speed 1.8980 million rays per second.
+	[PathTracer] Averaged 3.574988 intersection tests per ray.
+	[PathTracer] Saving to file: CBlucy_screenshot_3-22_12-52-29.png... Done!
+
+	BVH disabled: ca1c237eb4f2bc995faf90da145848941e4259ea
+
+	Cow:
+	[PathTracer] Input scene file: ../../../dae/meshedit/cow.dae
+	[PathTracer] Rendering using 1 threads
+	[PathTracer] Collecting primitives... Done! (0.0009 sec)
+	[PathTracer] Building BVH from 5856 primitives... Done! (0.0001 sec)
+	[PathTracer] Rendering... 100%! (28.2115s)
+	[PathTracer] BVH traced 480000 rays.
+	[PathTracer] Average speed 0.0170 million rays per second.
+	[PathTracer] Averaged 5856.000000 intersection tests per ray.
+	[PathTracer] Saving to file: cow_screenshot_3-22_14-15-5.png... Done!
+
+	Building:
+	[PathTracer] Input scene file: ../../../dae/keenan/building.dae
+	[PathTracer] Rendering using 1 threads
+	[PathTracer] Collecting primitives... Done! (0.0054 sec)
+	[PathTracer] Building BVH from 39506 primitives... Done! (0.0008 sec)
+	[PathTracer] Rendering... 100%! (213.7916s)
+	[PathTracer] BVH traced 480000 rays.
+	[PathTracer] Average speed 0.0022 million rays per second.
+	[PathTracer] Averaged 39506.000000 intersection tests per ray.
+	[PathTracer] Saving to file: building_screenshot_3-22_12-58-20.png... Done!
+
+	MaxPlanck:
+	[PathTracer] Input scene file: ../../../dae/meshedit/maxplanck.dae
+	[PathTracer] Rendering using 1 threads
+	[PathTracer] Collecting primitives... Done! (0.0074 sec)
+	[PathTracer] Building BVH from 50801 primitives... Done! (0.0011 sec)
+	[PathTracer] Rendering... 100%! (390.0616s)
+	[PathTracer] BVH traced 480000 rays.
+	[PathTracer] Average speed 0.0012 million rays per second.
+	[PathTracer] Averaged 50801.000000 intersection tests per ray.
+	[PathTracer] Saving to file: maxplanck_screenshot_3-22_13-9-52.png... Done!
+
+	Dragon:
+	[PathTracer] Input scene file: ../../../dae/sky/dragon.dae
+	[PathTracer] Rendering using 1 threads
+	[PathTracer] Collecting primitives... Done! (0.0188 sec)
+	[PathTracer] Building BVH from 105120 primitives... Done! (0.0026 sec)-->
+			<!--[PathTracer] Rendering... 29%
+	[PathTracer] Rendering canceled!-->
+			<!--[PathTracer] Rendering... 100%! (1385.3387s)
+	[PathTracer] BVH traced 480000 rays.
+	[PathTracer] Average speed 0.0003 million rays per second.
+	[PathTracer] Averaged 105120.000000 intersection tests per ray.
+	[PathTracer] Saving to file: dragon_screenshot_3-22_13-41-13.png... Done!
+
+	CBlucy:
+	[PathTracer] Input scene file: ../../../dae/sky/CBlucy.dae
+	[PathTracer] Rendering using 1 threads
+	[PathTracer] Collecting primitives... Done! (0.0221 sec)
+	[PathTracer] Building BVH from 133796 primitives... Done! (0.0033 sec)
+	[PathTracer] Rendering... 100%! (1863.7182s)
+	[PathTracer] BVH traced 480000 rays.
+	[PathTracer] Average speed 0.0003 million rays per second.
+	[PathTracer] Averaged 133796.000000 intersection tests per ray.
+	[PathTracer] Saving to file: CBlucy_screenshot_3-22_14-13-36.png... Done!-->
+
+			<div style="display: flex; flex-direction: column; align-items: center;">
+				<table style="width: 100%; text-align: center; border-collapse: collapse;">
+					<tr>
+						<td style="text-align: center;">
+							<img src="P1.1.png" width="400px" />
+							<figcaption>An empty room of made of triangles.</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="P1.2.png" width="400px" />
+							<figcaption>The same room but now with two spheres.</figcaption>
+						</td>
+					</tr>
+					<tr>
+						<td style="text-align: center;">
+							<img src="P1.3.png" width="400px" />
+							<figcaption>A banana mesh on a pedastal.</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="P1.4.png" width="400px" />
+							<figcaption>A cute cow figure.</figcaption>
+						</td>
+					</tr>
+				</table>
+			</div>
 
 			<h2>Part 3: Direct Illumination</h2>
 			Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
