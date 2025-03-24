@@ -133,7 +133,7 @@
 						<td style="text-align: center;">
 							<img src="CBlucy_screenshot_3-22_12-52-29.png" width="400px" />
 							<figcaption>A devastating render of Lucy - 133796 primitives!</figcaption>
-						</td>						
+						</td>
 					</tr>
 				</table>
 			</div>
@@ -363,7 +363,57 @@
 	[PathTracer] Saving to file: CBlucy_screenshot_3-22_14-13-36.png... Done!-->
 
 			<h2>Part 3: Direct Illumination</h2>
-			Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+			<p>Direct illumination complements zero bounce radiance.  Zero bound radiance captures light that (as named) does not bounce off of any surfaces before hitting the camera. This is determined by the emissions from the intersecred surface, which is either a light source or not.</p>
+
+			<p>With that implemented, one-bounce direct lighting appears in two forms. A brute-force random hemisphere sampling algorithm, and an iterative light source sampling algorithm.</p>
+
+			<p>In the simpler former uniform hemisphere sampler, light rays are shot randomly in hopes of hitting the light source. This method takes a long time to converge due to low likelihoods for a surface ray to hit a light source (given that majority of the scene is not made of light sources). From a hit point, and for a standard number of samples, we sample a random light direction from the surface in object space. We generate a sample ray in world space by starting from the hit point, and converting our random light direction to world space. We avoid accidentally intersecting the surface we are bouncing from by starting intersection tests a miniscule amount of time after the ray is shot up. Using BVH acceleration from earlier, we see where the ray intersects the scene for light reflection estimation. We determine if the intersected inward surface has emissions (is a light); we calculate the outward bsdf reflectance of the surface that's being hit by the light; we account for the angle of attack affecting light reflectivity; and we divide by a constant 1/(2*PI) in order to uniformly scale to the chance of sampling that ray. Direct lighting overall is then scaled down again by the number of samples taken per ray, and is used to light the render.</p>
+
+			<p>Direct lighting by importance sampling light sources handles the two weaknesses of the hemisphere sampler. 1. The chance of successfully random sampling a point lights source in a scene is neglibile & 2. Walls and objects won't contribute any one bounce illumination, so we're wasting samples that point at those non radiant surfaces. Instead, we make a few alterations to the sampling of the hemisphere algorithm to reduce computations. Instead of sampling a random direction, we iterate through all light sources (point or surfaces). For each, we sample an outward ray from the hit point all over the area of the light source, testing if any intersection occurs from just after the ray is shot to just before it would have hit the light. If no intersection occurs, we know there is nothing blocking a light ray from reaching the hit point, and thus we can similarly calculate the surface's' light reflection the same as before, but with the inward light's pdf now handled by the light sampler. Light contributions scale down by the area of the light source (or not at all for single light point sources) before being added to the total light estimation.</p>
+
+			<p>Let's look at different renders using the hemisphere sampling with 1 and 64 sample rays, then with the importance light sampler with 1, 4, 16, and 64 ray samples.</p>
+
+			<div style="display: flex; flex-direction: column; align-items: center;">
+				<table style="width: 100%; text-align: center; border-collapse: collapse;">
+					<tr>
+						<td style="text-align: center;">
+							<img src="CBbunny_screenshot_3-24_1-20-13.png" width="400px" />
+							<figcaption>Hemisphere - 1 sample.</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="CBbunny_screenshot_3-24_1-46-14.png" width="400px" />
+							<figcaption>Hemisphere - 64 samples.</figcaption>
+						</td>
+					</tr>
+				</table>
+			</div>
+
+			<div style="display: flex; flex-direction: column; align-items: center;">
+				<table style="width: 100%; text-align: center; border-collapse: collapse;">
+					<tr>
+						<td style="text-align: center;">
+							<img src="CBbunny_screenshot_3-24_1-20-27.png" width="400px" />
+							<figcaption>Light - 1 sample.</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="CBbunny_screenshot_3-24_1-21-0.png" width="400px" />
+							<figcaption>Light - 4 samples.</figcaption>
+						</td>
+					</tr>
+					<tr>
+						<td style="text-align: center;">
+							<img src="CBbunny_screenshot_3-24_1-21-21.png" width="400px" />
+							<figcaption>Light - 16 samples.</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="CBbunny_screenshot_3-24_1-21-34.png" width="400px" />
+							<figcaption>Light - 16 samples.</figcaption>
+						</td>
+					</tr>
+				</table>
+			</div>
+
+			<p>Without any explanation, it is clear as day the hemisphere sample method's results pale in comparison to the specific light sample method using the same parameters. The most discernable object is the light source, which is only visible since I included emission from the zero-bounce illumination underneath. Moving on to importance light sampling, even with only 1 ray sampled per light, the scene is accurately recreated. The bunny's ears, the shape of its face, the shadow it casts on the floor, and the colors of the inner walls are all processed. However, there is still some grain pixels on the floor that are still completely black, caused by the sampled ray choosing an unlucky direction, intersecting the bunny, when there are still areas of light that technically are unobstructed. Thus, we can mitigate this noise by increasing the ray sample count, spreading out the light areas sampled. The effects of this are even visible on the walls, where grain in the low sample case are likely caused by different angles of reflection, even if the bunny isn't posing a threat of blockage. Comparing the 64 sample ray renders, the darkness and noisiness of the hemisphere sampling reveals the necessity for significant minimum computation before a satisfactory lighting result is possible. Overall, by going through each light in the environment, we can make more educated tests and reach a convincing render with a fraction of the time and effort.</p>
 
 			<h2>Part 4: Global Illumination</h2>
 			Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
