@@ -51,11 +51,14 @@
 			<br>
 
 			Link to webpage: <a href="https://cal-cs184-student.github.io/hw-webpages-pork-chopped-website/hw3/index.html">Webpage</a>
+
+			<br>
+
 			Link to GitHub repository: <a href="https://github.com/cal-cs184-student/sp25-hw3-pork3">Repo</a>
 
 			<figure>
 				<img src="cornell.png" alt="Cornell Boxes with Bunnies" style="width:70%" />
-				<figcaption>You can add images with captions!</figcaption>
+				<figcaption>Geeked vs Locked in</figcaption>
 			</figure>
 
 			<!--
@@ -63,7 +66,8 @@
 	-->
 
 			<h2>Overview</h2>
-			Give a high-level overview of what you implemented in this homework. Think about what you've built as a whole. Share your thoughts on what interesting things you've learned from completing the homework.
+
+			The many things we implemented in this assignment was first Ray Generation and Scene Intersection which is the basics of rendering since our rays are the actual items doing the traversals to render items. Next we implemented Bounding Volume Hierachy (BVH) which allowed for quicker checking of intersections allowing us to render images faster. Next, we implemented direct lighting which allowed us to render images using zero-bounce illumination and direct lighting using uniform-hemisphere sampling. Then, we implemented global illumination which helped render images using N boucnes of light as well as Russian Roulette to cut off some rays early. Finally, we implemented adaptive sampling which takes advantage of the fact some pixels converge faster than others and some pixels need more samples to get rid of noise. One of the interesting things we've leanred was how much adaptive sampling can improve the look of images compared to increasing the pure amount of samples, focusing less on pixels that converge faster and more on pixels that take longer to converge, we end up with images that look much nicer with less noise than just increasing the amount of samples.
 
 			<h2>Part 1: Ray Generation and Scene Intersection</h2>
 			<p>* Task 1.1: Ray generation is a fundamental piece of intersection-based light algorithms. Given a normalized (x,y) in image space [0,0]:[1,1] that we would like convert into world space, we first convert from image space to camera space defaulted to facing the z-axis [-tan(0.5*hFov),-tan(0.5*vFov),-1]:[tan(0.5*hFov),tan(0.5*vFov),-1]. This is processed by re-centering the origin in image space before converting the hFov and vFov into radians and calculating the camera space coordinates. From there, we apply the camera to world rotation matrix to convert into the world space. Finally, we normalize the ray direction in world space, and return a ray starting at the camera's position in world space, and with generic nClip and fClip boundaries for time.</p>
@@ -625,10 +629,36 @@
 			<p>Finally, we can inspect the affect of sample-per-pixel rates. Noise and speckles make the 1 sample render appear like a vintage film photo. Only by incrementing the sample rate do these grains get averaged out, as light is bounced and diffused more evenly across the scene. By 64, the image has lost the most damning noise, with the worst parts visible in dark/shadowy sections such as the underside of the bunny or the corners of the walls. Then with 1024 the noise is all but handled.</p>
 
 			<h2>Part 5: Adaptive Sampling</h2>
-			Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
+			Adaptive Sampling a method of sampling where instead of trying to use equal and a possibly high number of samples per pixel, we instead sample more on the difficult areas of the image so that the less important parts of our image render faster, and the most important part of our image has more details since we reduce a large amount of noise. Adaptive sampling works since some pixels converge faster with a lower sampling rate while some others need more sampling to blend and take care of random noise.
+			
+			Our implementation of adaptive sampling keeps track of s1 and s2 which are our sum and sum of squares of illuminance, by keep track of these it makes our computations for mean, variance, and standard deviation easier. We go through every iteration of num_samples which acts as the amount of batches and in each we loop through samplesPerBatch times, in each we sample and create a ray, with this ray, we grab it's illuminance and add that to s1, and the square of the illuminance to s2 and add the illuminance to our total_radiance then increment counter to keep looping through our samples. At the end of every batch, we calculate the mean, varaince, and std deviation with s1 and s2, then we have I which we use to measure a pixel's convergence, when our our I which is defined as (1.96 * std/sqrt(n)) is less than or equal our set maxTolerance*mean, then we say that the pixel has converged and that we are able to stop tracing rays for this pixel, otherwise we continuing the loop. We do this for each of the batches and at the end, we update our sampleBuffer's pixel with the mean total_radiance and add the amount of batches to our sampleCountBuffer.
+			
+			<table style="width: 100%; text-align: center; border-collapse: collapse;">
+				<tr>
+					<td style="text-align: center;">
+						<img src="spheres_rendering.png.png" width="480px" height="360px" />
+						<figcaption>Spheres</figcaption>
+					</td>
+					<td style="text-align: center;">
+						<img src="spheres_rendering_rate.png.png" width="480px" height="360px" />
+						<figcaption>Spheres Sampling Rates</figcaption>
+					</td>
+				</tr>
+				<tr>
+					<td style="text-align: center;">
+						<img src="wall-e.png.png" width="480px" height="360px" />
+						<figcaption>Wall-E</figcaption>
+					</td>
+					<td style="text-align: center;">
+						<img src="wall-e_rate.png.png" width="480px" height="360px" />
+						<figcaption>Wall-E Sampling Rates</figcaption>
+					</td>
+				</tr>
+</table>
 
 
 		</div>
+
+		<p>What made this homework the most different from the previous ones was the freedom of options for ways to render. Relying on our local machines to do rendering without GPU acceleration was also a major consideration for how our workflow changed. Not only that, but working during Spring Break while no one else was around also made the workd feel more isolated than before. It was critical to communicate what we were working on and clarify questions we had as they came up to determine how we should allocate work. There's been a lot of time invested in this homework specifically, but we are proud of what was achieved.</p>
 	</body>
 </html>
