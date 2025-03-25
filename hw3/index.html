@@ -419,13 +419,216 @@
 			<p>Without any explanation, it is clear as day that the hemisphere sample method's results pale in comparison to the specific light sample method using the same parameters. The most discernable object is the light source, which is only visible since we included emission from the zero-bounce illumination underneath. Moving on to importance light sampling, even with only 1 ray sampled per light, the scene is accurately recreated. The bunny's ears, the shape of its face, the shadow it casts on the floor, and the colors of the inner walls are all processed. However, there is still some grain pixels on the floor that are still completely black, caused by the sampled ray choosing an unlucky direction, intersecting the bunny, when there are still areas of light that technically are unobstructed. Thus, we can mitigate this noise by increasing the ray sample count, spreading out the tested area over the light source's surface. The effects of this are even visible on the walls, where grain and texture in the low sample case are likely caused by varying angles of reflection, even if the bunny isn't posing a threat of blockage. At 64 samples, the walls successfully begin to reach their true smooth and gradiented state. Comparing both of the 64 sample ray renders, the darkness and noisiness of the hemisphere sampling reveals the necessity for significant minimum computation before a satisfactory lighting result (unshown) is possible. Overall, by going through each light in the environment, we can make more educated tests and reach a convincing render with a fraction of the time and effort.</p>
 
 			<h2>Part 4: Global Illumination</h2>
-			Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+			<p>Global illumination, the combination of both the direct (zero + one bounce) and indirect (multi-bounce) lighting, allows light to travel from non-light sources that reflect (diffused) light. From a high level, indirect lighting had to be added on top of our existing direct lighting from Part 3. We thus replace our one bounce function, for a new <b>at least</b> one bounce function. In the simple case where the maximum desired ray depth is one, we just return the original direct lighting. In the case where bounces are desired, aka ray depths are greater than one, we initialize the direct lighting and then call a recursive chain of consecutive bounces. We guaranteed that at least one bounce will occur with a specific if condition (when the inputted ray's depth matches the max desired ray bounces), but otherwise the code follows the russian roulette algorithm from lecture. We chose a termination chance value of 0.4 out of the range [0.3, 0.4] to make it more likely that high depth bounces are terminated. With this, we can input high-ceiling ray bounce inputs while expecting most of them to be pruned. This is important because ideally we would like to simulate infinite bounces, but light contributions get dimmer as they bounce, so having a decent chance random chance for any ray to short circuit drastically reduces the actual number of light rays that bounce "many" times. From our hit point, we sample a new ray, and if that ray wins a russian roulette roll, we calculate the light's contribution just as before, but normalized by the chance of winning the russian roulette. Each consecutive call is thus dimmer than the previous, until either termination or the max_ray_depth is reached. In short, each call get's its own idea of a one bounce (which gets scaled down) adds any indirect lighting from the next surface hit to itself (which is later tallied all up into L_out).</p>
+
+			<p>Let's take a look at some renders with global illumination! Numbers will represent the camera rays per pixel. max ray depth, and samples per area light respectively!</p>
+
+			<div style="display: flex; flex-direction: column; align-items: center;">
+				<table style="width: 100%; text-align: center; border-collapse: collapse;">
+					<tr>
+						<td style="text-align: center;">
+							<img src="B2.1 CBdragon_microfacet_au.png" width="400px" />
+							<figcaption>Globally illuminated dragon (no diffuse) - 1024,5,1.</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="B2.2 CBlucy.png" width="400px" />
+							<figcaption>Globally illuminated lucy (no diffuse) - 1024,5,1.</figcaption>
+						</td>
+					</tr>
+				</table>
+			</div>
+
+			<!--only direct vs only indirect scene-->
+			<div style="display: flex; flex-direction: column; align-items: center;">
+				<table style="width: 100%; text-align: center; border-collapse: collapse;">
+					<tr>
+						<td style="text-align: center;">
+							<img src="B3.1 CBbunny.png" width="400px" />
+							<figcaption>Bunny with only <b>direct</b> lighting - 1024,1,1.</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="B3.2 CBbunny.png" width="400px" />
+							<figcaption>Bunny with only <b>indirect</b> lighting - 1024,5,1.</figcaption>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<p>Notice in the direct lighting case, we see no reflected red or blue lighting around the room, and the shadow below the bunny is absolute. Only light with straight rays are rendered (plus zero bounce from the light to the camera). On the other hand, indirect lighting has no harsh lighting. The colors of the painted walls glaze their surroundings, and some light has even bounced around the bunny, illuminating areas that otherwise have no direct exposure to the ceiling light.</p>
+
+			<!--render 0th to 5th bounce of light for CBbunny-->
+			<div style="display: flex; flex-direction: column; align-items: center;">
+				<table style="width: 100%; text-align: center; border-collapse: collapse;">
+					<tr>
+						<td style="text-align: center;">
+							<img src="BunnyNoAccum-0.png" width="400px" />
+							<figcaption>Bunny of 0 bounce light, accumulating; 64,0,1.</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="BunnyNoAccum-0.png" width="400px" />
+							<figcaption>Bunny of 0 bounce light, mth; 64,0,1.</figcaption>
+						</td>
+					</tr>
+					<tr>
+						<td style="text-align: center;">
+							<img src="BunnyAccum1.png" width="400px" />
+							<figcaption>Bunny of 1 bounce light, accumulating; 64,1,1.</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="BunnyNoAccum1.png" width="400px" />
+							<figcaption>Bunny of 1 bounce light, mth; 64,1,1.</figcaption>
+						</td>
+					</tr>
+					<tr>
+						<td style="text-align: center;">
+							<img src="BunnyAccum2.png" width="400px" />
+							<figcaption>Bunny of 2 bounce lights, accumulating; 64,2,1.</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="BunnyNoAccum2.png" width="400px" />
+							<figcaption>Bunny of 2 bounce lights, mth; 64,2,1.</figcaption>
+						</td>
+					</tr>
+					<tr>
+						<td style="text-align: center;">
+							<img src="BunnyAccum3.png" width="400px" />
+							<figcaption>Bunny of 3 bounce lights, accumulating; 64,3,1.</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="BunnyNoAccum3.png" width="400px" />
+							<figcaption>Bunny of 3 bounce lights, mth; 64,3,1.</figcaption>
+						</td>
+					</tr>
+					<tr>
+						<td style="text-align: center;">
+							<img src="BunnyAccum4.png" width="400px" />
+							<figcaption>Bunny of 4 bounce lights, accumulating; 64,4,1.</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="BunnyNoAccum4.png" width="400px" />
+							<figcaption>Bunny of 4 bounce lights, mth; 64,4,1.</figcaption>
+						</td>
+					</tr>
+					<tr>
+						<td style="text-align: center;">
+							<img src="BunnyAccum5.png" width="400px" />
+							<figcaption>Bunny of 5 bounce lights, accumulating; 64,5,1.</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="BunnyNoAccum5.png" width="400px" />
+							<figcaption>Bunny of 5 bounce lights, mth; 64,5,1.</figcaption>
+						</td>
+					</tr>
+					<tr>
+						<td style="text-align: center;">
+							<img src="BunnyAccum100.png" width="400px" />
+							<figcaption>Bunny of 100 bounce lights, accumulating; 64,100,1.</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="BunnyNoAccum100.png" width="400px" />
+							<figcaption>Bunny of 100 bounce lights, mth; 64,100,1.</figcaption>
+						</td>
+					</tr>
+				</table>
+			</div>
+
+			<p>Taking a close look at the 2nd and 3rd bounce lights of mth unaccumulated light, we can clearly see that the 2nd bounce is decently bright. Not quite as bright as the direct lighting, as expected, but we see how the top of the bunny is darker than the bottom. We can imagine that this light just left the ceiling light, and is bouncing off the floor, causing this pattern. On the other hand, the 3rd bounce light gets dimmer still (as rays are further terminated and normalized), with no particular hot spot for light bounces. In the overall image, the second would be particularly important for spreading the brightest and strongest bottom floor light reflections, whereas the third is the brightest of the consecutive bounces that generally scatters light in the room. As the rays continue to bounce, they only continue to dim.</p>
+
+			<p>Overall, the accumulated bunny renders reveal this. The image gets noticably brighter from the 2nd to 3rd bounce, but we only see diminishing returns as consecutive bounces are weaker and rarer. This would explain the negligible difference from the 5th to 100th max ray bounces. It is statistically improbable that a ray would reach 100 bounces (with our aforementioned termination probability of 40% per bounce). Instead we should look at the unaccumulated images to see the differences per stage. In the 0 and 1 bounce cases, no light has been accumulated so the images are decidedly the same. However, from the 2nd to 5th bounce, we can observe the surviving lights dim. By the 100th bounce, there are no remaining light bounces, with only the zero bounce ceiling lighting visible.</p>
+
+			<p>Below we include some similar bunnies with the samples per pixel increased to 1024, which will follow the same trends.</p>
+
+			<div style="display: flex; flex-direction: column; align-items: center;">
+				<table style="width: 100%; text-align: center; border-collapse: collapse;">
+					<tr>
+						<td style="text-align: center;">
+							<img src="BunnyNoAccum-0" width="400px" />
+							<figcaption>Bunny of 0 bounce light, accumulating; 1024,0,1.</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="B5.3 CBbunny.png" width="400px" />
+							<figcaption>Bunny of 1 bounce light, accumulating; 1024,1,1.</figcaption>
+						</td>
+					</tr>
+					<tr>
+						<td style="text-align: center;">
+							<img src="B5.4 CBbunny.pngB5.2 CBbunny.png" width="400px" />
+							<figcaption>Bunny of 2 bounce light, accumulating; 1024,2,1.</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="B5.5 CBbunny.png" width="400px" />
+							<figcaption>Bunny of 3 bounce light, accumulating; 1024,3,1.</figcaption>
+						</td>
+					</tr>
+					<tr>
+						<td style="text-align: center;">
+							<img src="B5.6 CBbunny.png" width="400px" />
+							<figcaption>Bunny of 4 bounce lights, accumulating; 1024,4,1.</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="B5.1 CBbunny.png" width="400px" />
+							<figcaption>Bunny of 100 bounce lights, accumulating; 1024,100,1.</figcaption>
+						</td>
+					</tr>
+				</table>
+			</div>
+
+			<p>After increasing the samples per pixel to 1024, the bunny of 100 max rays has minimal noise or grain pixels. However, the same underlying diminishing returns from increased max_ray_count remains.</p>
+
+			<!--2nd and 3rd bounce for CBbunny-->
+
+			<div style="display: flex; flex-direction: column; align-items: center;">
+				<table style="width: 100%; text-align: center; border-collapse: collapse;">
+					<tr>
+						<td style="text-align: center;">
+							<img src="B6.1 CBbunny.png" width="400px" />
+							<figcaption>Bunny of 1 pixel sample, accumulating; 1,5,4.</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="B6.2 CBbunny.png" width="400px" />
+							<figcaption>Bunny of 2 pixel samples, accumulating; 2,5,4.</figcaption>
+						</td>
+					</tr>
+					<tr>
+						<td style="text-align: center;">
+							<img src="B6.3 CBbunny.png" width="400px" />
+							<figcaption>Bunny of 4 pixel samples, accumulating; 4,5,4.</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="B6.4 CBbunny.png" width="400px" />
+							<figcaption>Bunny of 8 pixel samples, accumulating; 8,5,4.</figcaption>
+						</td>
+					</tr>
+					<tr>
+						<td style="text-align: center;">
+							<img src="B6.5 CBbunny.png" width="400px" />
+							<figcaption>Bunny of 16 pixel samples, accumulating; 16,5,4.</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="B6.6 CBbunny.png" width="400px" />
+							<figcaption>Bunny of 64 pixel samples, accumulating; 64,5,4.</figcaption>
+						</td>
+					</tr>
+				</table>
+			</div>
+
+			<div style="display: flex; flex-direction: column; align-items: center;">
+				<table style="width: 100%; text-align: center; border-collapse: collapse;">
+					<tr>
+						<td style="text-align: center;">
+							<img src="B6.7 CBbunny.png" width="400px" />
+							<figcaption>Bunny of 1024 pixel samples, accumulating; 1024,5,4.</figcaption>
+						</td>
+					</tr>
+				</table>
+			</div>
+
+			<p>Finally, we can inspect the affect of sample-per-pixel rates. Noise and speckles make the 1 sample render appear like a vintage film photo. Only by incrementing the sample rate do these grains get averaged out, as light is bounced and diffused more evenly across the scene. By 64, the image has lost the most damning noise, with the worst parts visible in dark/shadowy sections such as the underside of the bunny or the corners of the walls. Then with 1024 the noise is all but handled.</p>
 
 			<h2>Part 5: Adaptive Sampling</h2>
 			Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
-			
-			
+
+
 		</div>
 	</body>
 </html>
