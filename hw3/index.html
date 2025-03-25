@@ -630,9 +630,9 @@
 
 			<h2>Part 5: Adaptive Sampling</h2>
 			Adaptive Sampling a method of sampling where instead of trying to use equal and a possibly high number of samples per pixel, we instead sample more on the difficult areas of the image so that the less important parts of our image render faster, and the most important part of our image has more details since we reduce a large amount of noise. Adaptive sampling works since some pixels converge faster with a lower sampling rate while some others need more sampling to blend and take care of random noise.
-			
+
 			Our implementation of adaptive sampling keeps track of s1 and s2 which are our sum and sum of squares of illuminance, by keep track of these it makes our computations for mean, variance, and standard deviation easier. We go through every iteration of num_samples which acts as the amount of batches and in each we loop through samplesPerBatch times, in each we sample and create a ray, with this ray, we grab it's illuminance and add that to s1, and the square of the illuminance to s2 and add the illuminance to our total_radiance then increment counter to keep looping through our samples. At the end of every batch, we calculate the mean, varaince, and std deviation with s1 and s2, then we have I which we use to measure a pixel's convergence, when our our I which is defined as (1.96 * std/sqrt(n)) is less than or equal our set maxTolerance*mean, then we say that the pixel has converged and that we are able to stop tracing rays for this pixel, otherwise we continuing the loop. We do this for each of the batches and at the end, we update our sampleBuffer's pixel with the mean total_radiance and add the amount of batches to our sampleCountBuffer.
-			
+
 			<table style="width: 100%; text-align: center; border-collapse: collapse;">
 				<tr>
 					<td style="text-align: center;">
@@ -654,11 +654,8 @@
 						<figcaption>Wall-E Sampling Rates</figcaption>
 					</td>
 				</tr>
-</table>
-
-
+			</table>
+			<p>What made this homework the most different from the previous ones was the freedom of options for ways to render. Relying on our local machines to do rendering without GPU acceleration was also a major consideration for how our workflow changed. Not only that, but working during Spring Break while no one else was around also made the work feel more isolated than before. It was critical to communicate what we were working on and clarify questions we had as they came up to determine how we should allocate work. There's been a lot of time invested in this homework specifically, but we are proud of what was achieved.</p>
 		</div>
-
-		<p>What made this homework the most different from the previous ones was the freedom of options for ways to render. Relying on our local machines to do rendering without GPU acceleration was also a major consideration for how our workflow changed. Not only that, but working during Spring Break while no one else was around also made the workd feel more isolated than before. It was critical to communicate what we were working on and clarify questions we had as they came up to determine how we should allocate work. There's been a lot of time invested in this homework specifically, but we are proud of what was achieved.</p>
 	</body>
 </html>
