@@ -426,6 +426,30 @@
 			
 			Our implementation of adaptive sampling keeps track of s1 and s2 which are our sum and sum of squares of illuminance, by keep track of these it makes our computations for mean, variance, and standard deviation easier. We go through every iteration of num_samples which acts as the amount of batches and in each we loop through samplesPerBatch times, in each we sample and create a ray, with this ray, we grab it's illuminance and add that to s1, and the square of the illuminance to s2 and add the illuminance to our total_radiance then increment counter to keep looping through our samples. At the end of every batch, we calculate the mean, varaince, and std deviation with s1 and s2, then we have I which we use to measure a pixel's convergence, when our our I which is defined as (1.96 * std/sqrt(n)) is less than or equal our set maxTolerance*mean, then we say that the pixel has converged and that we are able to stop tracing rays for this pixel, otherwise we continuing the loop. We do this for each of the batches and at the end, we update our sampleBuffer's pixel with the mean total_radiance and add the amount of batches to our sampleCountBuffer.
 			
+			<table style="width: 100%; text-align: center; border-collapse: collapse;">
+				<tr>
+					<td style="text-align: center;">
+						<img src="spheres_rendering.png.png" width="480px" height="360px" />
+						<figcaption>Spheres</figcaption>
+					</td>
+					<td style="text-align: center;">
+						<img src="spheres_rendering_rate.png.png" width="480px" height="360px" />
+						<figcaption>Spheres Sampling Rates</figcaption>
+					</td>
+				</tr>
+				<tr>
+					<td style="text-align: center;">
+						<img src="wall-e.png.png" width="480px" height="360px" />
+						<figcaption>Wall-E</figcaption>
+					</td>
+					<td style="text-align: center;">
+						<img src="wall-e_rate.png.png" width="480px" height="360px" />
+						<figcaption>Wall-E Sampling Rates</figcaption>
+					</td>
+				</tr>
+</table>
+
+
 		</div>
 	</body>
 </html>
