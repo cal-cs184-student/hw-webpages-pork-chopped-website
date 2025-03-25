@@ -66,6 +66,9 @@
 	-->
 
 			<h2>Overview</h2>
+
+			The many things we implemented in this assignment was first Ray Generation and Scene Intersection which is the basics of rendering since our rays are the actual items doing the traversals to render items. Next we implemented Bounding Volume Hierachy (BVH) which allowed for quicker checking of intersections allowing us to render images faster. Next, we implemented direct lighting which allowed us to render images using zero-bounce illumination and direct lighting using uniform-hemisphere sampling. Then, we implemented global illumination which helped render images using N boucnes of light as well as Russian Roulette to cut off some rays early. Finally, we implemented adaptive sampling which takes advantage of the fact some pixels converge faster than others and some pixels need more samples to get rid of noise. One of the interesting things we've leanred was how much adaptive sampling can improve the look of images compared to increasing the pure amount of samples, focusing less on pixels that converge faster and more on pixels that take longer to converge, we end up with images that look much nicer with less noise than just increasing the amount of samples.
+
 			Give a high-level overview of what you implemented in this homework. Think about what you've built as a whole. Share your thoughts on what interesting things you've learned from completing the homework.
 
 			<h2>Part 1: Ray Generation and Scene Intersection</h2>
