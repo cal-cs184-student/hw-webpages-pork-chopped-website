@@ -87,12 +87,12 @@
 
 			<ul>
 				<li>\(x_t\): position</li>
-				<li>\(d\): damping term [0,1] to simulate energy loss.</li>
+				<li>\(d\): damping term [0%,1%] to simulate energy loss.</li>
 				<li>\(a_t\): current acceleration from all forces</li>
 				<li>\(\Delta t\): time step (delta_t)</li>
 			</ul>
 
-			<p>Then to limit the spring deformation and stretch to reasonable amounts, where any pair of unpinned point masses are constrained and corrected towards at most 10% greater than the spring rest length.</p>
+			<p>Then to limit the spring deformation and stretch to reasonable amounts, any pair of unpinned point masses are constrained and corrected towards at most 10% greater than the spring rest length.</p>
 
 				<div style="display: flex; flex-direction: column; align-items: center;">
 					<table style="width: 100%; text-align: center; border-collapse: collapse;">
@@ -143,7 +143,7 @@
 							</td>
 							<td style="text-align: center;">
 								<img src="p2/2.6 100 damp.png" width="400px" />
-								<figcaption>100% force dampening</figcaption>
+								<figcaption>1% force dampening</figcaption>
 							</td>
 						</tr>
 						<tr>
@@ -155,7 +155,7 @@
 					</table>
 				</div>
 
-				<p>Adjusting the properties of the fabric results in a few notable differences. Lower spring constants resulted in the fabric stretching more, as it drapes lower and swings with more pronounced waves. The higher spring constants appear more rigid in rest and in motion. The low density fabric folds over relaxed with one larger crease at the top compared to the high density fabric, which experienced bowing on the sides due to higher tension as well as tighter upper folds. With no dampening, the fabric's motion was chaotic, as it conserved all the energy converted from potential to kinetic with volatile ripples and great swings. The fabric with 100% dampening fell down rather elegantly, although slower than would be expected with Earth's gravity, there was little to no over-swing, as it reached a near rest position by the first one. The final example of fabric simulation with all four corners pinned sits comfortably, as each corner's tension causes diagonal peaks, with smooth valleys resting between each.</p>
+				<p>Adjusting the properties of the fabric results in a few notable differences. Lower spring constants resulted in the fabric stretching more, as it drapes lower and swings with more pronounced waves. The higher spring constants appear more rigid in rest and in motion. The low density fabric folds over relaxed with one larger crease at the top compared to the high density fabric, which experienced bowing on the sides due to higher tension as well as tighter upper folds. With no dampening, the fabric's motion was chaotic, as it conserved all the energy converted from potential to kinetic with volatile ripples and great swings. The fabric with the full 1% dampening fell down rather elegantly, although slower than would be expected with Earth's gravity, there was little to no over-swing, as it reached a near rest position by the first one. The final example of fabric simulation with all four corners pinned sits comfortably, as each corner's tension causes diagonal peaks, with smooth valleys resting between each.</p>
 
 				<h2>Part 3: Handling collisions with other objects</h2>
 				<div style="display: flex; flex-direction: column; align-items: center;">
