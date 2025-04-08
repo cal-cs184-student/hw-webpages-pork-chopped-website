@@ -80,7 +80,7 @@
 
 			<h2>Part 2: Simulation via numerical integration</h2>
 			<p>For Part 2, we incorporate two forces for simulation. The first, external forces (e.g. gravity), and the second, spring correction forces.</p>
-			<p>We first begin by calculating force acting on each point mass. For external forces acting on each point mass, we follow \(F = ma\). Then, for every spring, we calculate spring correction forces with \(F_s = k_s \cdot ( \| p_a - p_b \| - l )\), where \(k_s\) is the spring constant, \(p_a\) & \(p_a\) are the end positions of our spring, and \(l\) is the length of the spring.</p>
+			<p>We first begin by calculating force acting on each point mass. For external forces acting on each point mass, we follow \(F = ma\). Then, for every spring, we calculate spring correction forces with \(F_s = k_s \cdot ( \| p_a - p_b \| - l )\), where \(k_s\) is the spring constant, \(p_a\) & \(p_b\) are the end positions of our spring, and \(l\) is the length of the spring.</p>
 			<p>For every point mass that is not pinned, we apply the forces to each using Verlet Integration with a damping factor to account for energy loss from friction, heat, etc.:</p>
 
 			<p>\[x_{t+\Delta t}=x_t+(1-d)\cdot\bigl(x_t-x_{t-\Delta t}\bigr)+a_t\cdot\Delta t^2\]</p>
@@ -98,57 +98,57 @@
 					<table style="width: 100%; text-align: center; border-collapse: collapse;">
 						<tr>
 							<td style="text-align: center;">
-								<img src="2.1 500 ks.png" width="400px" />
+								<img src="p2/2.1 500 ks.png" width="400px" />
 								<figcaption>Low spring constant</figcaption>
 							</td>
 							<td style="text-align: center;">
-								<img src="2.1.1 500 ks swing.png" width="400px" />
+								<img src="p2/2.1.1 500 ks swing.png" width="400px" />
 								<figcaption>Low spring constant, mid swing</figcaption>
 							</td>
 						</tr>
 						<tr>
 							<td style="text-align: center;">
-								<img src="2.2 50000 ks.png" width="400px" />
+								<img src="p2/2.2 50000 ks.png" width="400px" />
 								<figcaption>High spring constant</figcaption>
 							</td>
 							<td style="text-align: center;">
-								<img src="2.2.1 50000 ks swing.png" width="400px" />
+								<img src="p2/2.2.1 50000 ks swing.png" width="400px" />
 								<figcaption>High spring constant, mid swing</figcaption>
 							</td>
 						</tr>
 						<tr>
 							<td style="text-align: center;">
-								<img src="2.3 15 gpermsq.png" width="400px" />
+								<img src="p2/2.3 15 gpermsq.png" width="400px" />
 								<figcaption>low density</figcaption>
 							</td>
 							<td style="text-align: center;">
-								<img src="2.3.1 15 gpermsq swing.png" width="400px" />
+								<img src="p2/2.3.1 15 gpermsq swing.png" width="400px" />
 								<figcaption>low density, mid swing</figcaption>
 							</td>
 						</tr>
 						<tr>
 							<td style="text-align: center;">
-								<img src="2.4 1500 gpermsq.png" width="400px" />
+								<img src="p2/2.4 1500 gpermsq.png" width="400px" />
 								<figcaption>high density</figcaption>
 							</td>
 							<td style="text-align: center;">
-								<img src="2.4.1 1500 gpermsq swing.png" width="400px" />
+								<img src="p2/2.4.1 1500 gpermsq swing.png" width="400px" />
 								<figcaption>high density, mid swing</figcaption>
 							</td>
 						</tr>
 						<tr>
 							<td style="text-align: center;">
-								<img src="2.5 0 damp.png" width="400px" />
+								<img src="p2/2.5 0 damp.png" width="400px" />
 								<figcaption>0% force dampening</figcaption>
 							</td>
 							<td style="text-align: center;">
-								<img src="2.6 100 damp.png" width="400px" />
+								<img src="p2/2.6 100 damp.png" width="400px" />
 								<figcaption>100% force dampening</figcaption>
 							</td>
 						</tr>
 						<tr>
 							<td style="text-align: center;">
-								<img src="2.7 pinned4 shaded.png" width="400px" />
+								<img src="p2/2.7 pinned4 shaded.png" width="400px" />
 								<figcaption>Default settings, 4 corners pinned</figcaption>
 							</td>
 						</tr>
