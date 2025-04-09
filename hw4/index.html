@@ -48,8 +48,8 @@
 	-->
 
 			<h2>Overview</h2>
-			Give a high-level overview of what you implemented in this homework. Think about what you've built as a whole. Share your thoughts on what interesting things you've learned from completing the homework.
-
+			<p>HW 4 encapsulates the real-time simulation of a fabric cloth. From a foundational standpoint, the fabric's mesh is made up of point masses, encounering interal spring forces and self-collisions, and external gravitational and object-collision forces. </p> 
+				
 			<h2>Part 1: Masses and springs</h2>
 
 
@@ -190,7 +190,7 @@
 			<h2>Part 4: Handling self-collisions</h2>
 			<p>Now that our cloth can handle simple collisions with planes and spheres, we arive at the question of how we simulate the cloth at a realistic resting state? To achieve this, we added self-collision functionality during simulation.</p>
 
-			<p>Firstly, we organize our point masses into 3D boxes, based on the point mass's position. The boxes have dimensions \( w \cdot h \cdot t \) determined via 3 equations: \( w = 3 \cdot width / num_width_points \), \( h = 3 \cdot height / num_height_points \), and \( t = max(w,h) \). Based on these number of points, the size of these adjacency boxes of point masses scale.</p>
+			<p>Firstly, we organize our point masses into 3D boxes, based on the point mass's position. The boxes have dimensions \( w \cdot h \cdot t \) determined via 3 equations: \( w = 3 \cdot width / numwidthpoints \), \( h = 3 \cdot height / numheightpoints \), and \( t = max(w,h) \). Based on these number of points, the size of these adjacency boxes of point masses scale.</p>
 
 			<p>Secondly, we iterate through all of the point masses inside our fabric to initialize a map that assigns each point mass to the unique identifier of its corresponding box.</p>
 
