@@ -39,7 +39,7 @@
 			Link to GitHub repository: <a href="https://github.com/cal-cs184-student/sp25-hw4-lebron">https://github.com/cal-cs184-student/sp25-hw4-lebron</a>
 
 			<figure>
-				<img src="clothsim.png" alt="Cloth draped over sphere" style="width:70%" />
+				<img src="triple.png" alt="Cloth draped over sphere" style="width:70%" />
 				<figcaption>&#128514;</figcaption>
 			</figure>
 
@@ -48,8 +48,8 @@
 	-->
 
 			<h2>Overview</h2>
-			<p>HW 4 encapsulates the real-time simulation of a fabric cloth. From a foundational standpoint, the fabric's mesh is made up of point masses, encounering interal spring forces and self-collisions, and external gravitational and object-collision forces. </p> 
-				
+			In this homework, we implemented a real-time simulation of cloth. To get started, we first had to create the actual cloth which we did by having point masses and springs that connect them. We had 3 different kinds of springs that allowed the cloth to move realistically. Next, we implemented simulation of movement that took into account both external forces like gravity and spring correction forces, by calculating the force acting on each point mass and applying these forces using Verlet Integration with a damping factor to account for energy loss, we were able to realistically simulate the cloth falling and moving around. Next we had to handle the cloth colliding with other objects, by pushing point masses out of spheres and planes, we were able to implement realistic collision where our cloth could wrap around a sphere or fall flat onto a plane, this part took into account friction and the spring constant KS. We also handle self collisions by organizing our point masses into 3D boxes, if two points in any box are too close together, we pushed them away, this allowed our cloth to fall and fold onto itself rather than be a stiff board. In the final part we learned and implemented some shaders using openGL, some of the different types of shading and lighting we implemented were diffuse, Blinn Phong, texture, displacement, bump, and mirror. I think something interesting we learned while doing this homework was how much some of the parameters that we could adjust like the density, spring constant, and damping could affect our cloth simulation.
+
 			<h2>Part 1: Masses and springs</h2>
 
 
@@ -296,6 +296,10 @@
 						<td style="text-align: center;">
 							<img src="p5/5.5 Pearto.png" width="400px" />
 							<figcaption>Custom texture of Kasane Teto as a pear</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="Pearto.png" width="400px" />
+							<figcaption>Custom texture of Pearto if she was grayscale and off centered</figcaption>
 						</td>
 					</tr>
 					<tr>
