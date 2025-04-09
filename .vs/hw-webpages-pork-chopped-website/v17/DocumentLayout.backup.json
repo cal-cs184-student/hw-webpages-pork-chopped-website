@@ -3,8 +3,21 @@
   "WorkspaceRootPath": "C:\\Users\\kduto\\CS184\\hw-webpages-pork-chopped-website\\",
   "Documents": [
     {
+<<<<<<< HEAD
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\kduto\\CS184\\hw-webpages-pork-chopped-website\\hw4\\index.html||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:hw4\\index.html||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+=======
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Mpgow\\Desktop\\cs184\\hw-webpages-pork-chopped-website\\hw4\\index.html||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:hw4\\index.html||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Mpgow\\Desktop\\cs184\\hw-webpages-pork-chopped-website\\hw3\\index.html||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:hw3\\index.html||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Mpgow\\Desktop\\cs184\\hw-webpages-pork-chopped-website\\hw1\\index.html||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:hw1\\index.html||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+>>>>>>> bd7904613e1cc931a0958e33ac3e2b119910463c
     }
   ],
   "DocumentGroupContainers": [
@@ -24,13 +37,49 @@
               "$type": "Document",
               "DocumentIndex": 0,
               "Title": "index.html",
+<<<<<<< HEAD
               "DocumentMoniker": "C:\\Users\\kduto\\CS184\\hw-webpages-pork-chopped-website\\hw4\\index.html",
               "RelativeDocumentMoniker": "hw4\\index.html",
               "ToolTip": "C:\\Users\\kduto\\CS184\\hw-webpages-pork-chopped-website\\hw4\\index.html",
               "RelativeToolTip": "hw4\\index.html",
-              "ViewState": "AgIAACIAAAAAAAAAAADgvzYAAAABAAAAAAAAAA==",
+              "ViewState": "AgIAAEIAAAAAAAAAAADgv2YAAAA7AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001512|",
               "WhenOpened": "2025-04-04T10:10:13.117Z",
+=======
+              "DocumentMoniker": "C:\\Users\\Mpgow\\Desktop\\cs184\\hw-webpages-pork-chopped-website\\hw4\\index.html",
+              "RelativeDocumentMoniker": "hw4\\index.html",
+              "ToolTip": "C:\\Users\\Mpgow\\Desktop\\cs184\\hw-webpages-pork-chopped-website\\hw4\\index.html",
+              "RelativeToolTip": "hw4\\index.html",
+              "ViewState": "AgIAAK0AAAAAAAAAAAAqwLQAAAAQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001512|",
+              "WhenOpened": "2025-04-06T22:39:32.317Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "index.html",
+              "DocumentMoniker": "C:\\Users\\Mpgow\\Desktop\\cs184\\hw-webpages-pork-chopped-website\\hw3\\index.html",
+              "RelativeDocumentMoniker": "hw3\\index.html",
+              "ToolTip": "C:\\Users\\Mpgow\\Desktop\\cs184\\hw-webpages-pork-chopped-website\\hw3\\index.html",
+              "RelativeToolTip": "hw3\\index.html",
+              "ViewState": "AgIAAJsBAAAAAAAAAAAAAKsBAABzAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001512|",
+              "WhenOpened": "2025-03-25T09:40:18.065Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "index.html",
+              "DocumentMoniker": "C:\\Users\\Mpgow\\Desktop\\cs184\\hw-webpages-pork-chopped-website\\hw1\\index.html",
+              "RelativeDocumentMoniker": "hw1\\index.html",
+              "ToolTip": "C:\\Users\\Mpgow\\Desktop\\cs184\\hw-webpages-pork-chopped-website\\hw1\\index.html",
+              "RelativeToolTip": "hw1\\index.html",
+              "ViewState": "AgIAAKIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001512|",
+              "WhenOpened": "2025-03-08T05:50:35.145Z",
+>>>>>>> bd7904613e1cc931a0958e33ac3e2b119910463c
               "EditorCaption": ""
             }
           ]
