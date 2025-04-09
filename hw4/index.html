@@ -82,9 +82,9 @@
 		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
 		<h2>Part 3: Handling collisions with other objects</h2>
-		In our implementation of handling collisions with spheres, we see if the point mass is inside the sphere by subtracting the origin of the sphere from the position of the point mass to get a vector, if the norm of this vector is smaller than the radius of the sphere, then we know the point mass is inside the sphere, to push it out to the surface of the sphere, we divide our vector by its norm to get a unit vector pointing in the direction of the point mass from origin of the sphere, we then do the origin of the sphere plus the unit vector being multiplied by the spheres radius and set this as the new position of the point mass since this new position is where the point mass would intersect the sphere. If we found that the norm of the distance vector was larger than the radius of the sphere, we know that the point mass is outside the sphere so we skip it. We do this collision check for all point masses.
+		In our implementation of handling collisions with spheres, we see if the point mass is inside the sphere by subtracting the origin of the sphere from the position of the point mass to get a vector, if the norm of this vector is smaller than the radius of the sphere, then we know the point mass is inside the sphere, to push it out to the surface of the sphere, we divide our vector by its norm to get a unit vector pointing in the direction of the point mass from origin of the sphere, we then do the origin of the sphere plus the unit vector being multiplied by the spheres radius and set this as the new position of the point mass since this new position is where the point mass would intersect the sphere, we then scale this position by 1-friction. If we found that the norm of the distance vector was larger than the radius of the sphere, we know that the point mass is outside the sphere so we skip it. We do this collision check for all point masses.
 
-		For our implementation of handling collisions with planes, we take advantage of the fact that all point masses have a last_position and position vector to represent their coordinates, we get two vectors, one from the last position to the point on the plane, and another from the current position to the point on the plane. We take the dot products of the current position vector, if it is negative then we know the point mass moved to a different side of the plane.
+		For our implementation of handling collisions with planes, we take advantage of the fact that all point masses have a last_position and position vector to represent their coordinates, we get two vectors, one from the last position to the point on the plane, and another from the current position to the point on the plane. We take the dot products of the current position vector, if it is negative then we know the point mass moved to a different side of the plane. We then calculate t which is the distance from the old point to the plane, we use this t to find the tangent point which is the old position + t * the distance from the current position to the last position. We then calculate a correction vector which is the tangent point + the plane normal times the sufrace offset minus the last position. Then we apply this correction vector to the last position and scale this position by 1-friction.
 
 
 		<div style="display: flex; flex-direction: column; align-items: center;">
@@ -92,15 +92,15 @@
 				<tr>
 					<td style="text-align: center;">
 						<img src="Part3KS500.png" width="400px" />
-						<figcaption>KS of 500</figcaption>
+						<figcaption>KS of 500. With a KS of 500, we see that the cloth is very slack on top of the ball, the cloth drapes clearly over the ball and almost completely wraps the ball.</figcaption>
 					</td>
 					<td style="text-align: center;">
 						<img src="Part3KS5000.png" width="400px" />
-						<figcaption>KS of 5000</figcaption>
+						<figcaption>KS of 5000. With a KS of 5000, the cloth is slightly more stiff than a KS of 500, but there are still many folds on the cloth and the cloth still covers the ball.</figcaption>
 					</td>
 					<td style="text-align: center;">
 						<img src="Part3KS50000.png" width="400px" />
-						<figcaption>KS of 50000</figcaption>
+						<figcaption>KS of 50000. With a KS of 50000, the cloth is stiff, it still sits on the ball, but a lot of the folds that were previously there are now gone, there are not as many folds since there is lack slack on the cloth, it doesn't wrap the ball as we can see there is clear space underneath the ball compared to the previous KS where the cloth appears to start wrapping around the bottom of the ball'</figcaption>
 					</td>
 				</tr>
 				<tr>
