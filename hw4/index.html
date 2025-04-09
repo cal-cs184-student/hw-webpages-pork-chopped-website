@@ -82,6 +82,11 @@
 		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
 		<h2>Part 3: Handling collisions with other objects</h2>
+		In our implementation of handling collisions with spheres, we see if the point mass is inside the sphere by subtracting the origin of the sphere from the position of the point mass to get a vector, if the norm of this vector is smaller than the radius of the sphere, then we know the point mass is inside the sphere, to push it out to the surface of the sphere, we divide our vector by its norm to get a unit vector pointing in the direction of the point mass from origin of the sphere, we then do the origin of the sphere plus the unit vector being multiplied by the spheres radius and set this as the new position of the point mass since this new position is where the point mass would intersect the sphere. If we found that the norm of the distance vector was larger than the radius of the sphere, we know that the point mass is outside the sphere so we skip it. We do this collision check for all point masses.
+
+		For our implementation of handling collisions with planes, we take advantage of the fact that all point masses have a last_position and position vector to represent their coordinates, we get two vectors, one from the last position to the point on the plane, and another from the current position to the point on the plane. We take the dot products of the current position vector, if it is negative then we know the point mass moved to a different side of the plane.
+
+
 		<div style="display: flex; flex-direction: column; align-items: center;">
 			<table style="width: 100%; text-align: center; border-collapse: collapse;">
 				<tr>
