@@ -183,7 +183,82 @@
 					</table>
 				</div>
 				<h2>Part 4: Handling self-collisions</h2>
-				Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+				<p>Now that our cloth can handle simple collisions with planes and spheres, we arive at the question of how we simulate the cloth at a realistic resting state? To achieve this, we added self-collision functionality during simulation.</p>
+				
+			    <p>Firstly, we organize our point masses into 3D boxes, based on the point mass's position. The boxes have dimensions \( w \cdot h \cdot t \) determined via 3 equations: \( w = 3 \cdot width / num_width_points \), \( h = 3 \cdot height / num_height_points \), and \( t = max(w,h) \). Based on these number of points, the size of these adjacency boxes of point masses scale.</p>
+
+				<p>Secondly, we iterate through all of the point masses inside our fabric to initialize a map that assigns each point mass to the unique identifier of its corresponding box.</p>
+
+				<p>Thirdly, for every point mass, we check every other point mass within the shared adjacency box, and check if the two are within \( 2 \cdot thickness \) distance apart. If so, we start collecting up correctional forces from all the other point masses, then average them out to apply to the original input point mass to simulate the fabric pushing against itself (perfectly folded fabric could only be \(2 \cdot thickness \) wide).</p>
+				
+			<div style="display: flex; flex-direction: column; align-items: center;">
+					<table style="width: 100%; text-align: center; border-collapse: collapse;">
+						<tr>
+							<td style="text-align: center;">
+								<img src="p4/4.1 Before.png" width="400px" />
+								<figcaption>Standing cloth before drop</figcaption>
+							</td>
+							<td style="text-align: center;">
+								<img src="p4/4.1 Before 1500 gpermsq.png" width="400px" />
+								<figcaption>High density cloth, same setup</figcaption>
+							</td>
+						</tr>
+						<tr>
+							<td style="text-align: center;">
+								<img src="p4/4.1 Before 500ks.png" width="400px" />
+								<figcaption>Low spring constant, same setup</figcaption>
+							</td>
+							<td style="text-align: center;">
+								<img src="p4/4.1 Before 50000ks.png" width="400px" />
+								<figcaption>High spring constant, same setup</figcaption>
+							</td>
+						</tr>
+						<tr>
+							<td style="text-align: center;">
+								<img src="p4/4.2 During.png" width="400px" />
+								<figcaption>Default cloth self-colliding</figcaption>
+							</td>
+							<td style="text-align: center;">
+								<img src="p4/4.2 During 1500 gpermsq.png" width="400px" />
+								<figcaption>High density cloth self-colliding</figcaption>
+							</td>
+						</tr>
+						<tr>
+							<td style="text-align: center;">
+								<img src="p4/4.2 During 500ks.png" width="400px" />
+								<figcaption>Low spring constant cloth self-colliding</figcaption>
+							</td>
+							<td style="text-align: center;">
+								<img src="p4/4.2 During 50000ks.png" width="400px" />
+								<figcaption>High spring constant cloth self-colliding</figcaption>
+							</td>
+						</tr>
+						<tr>
+							<td style="text-align: center;">
+								<img src="p4/4.3 After.png" width="400px" />
+								<figcaption>Default cloth at "rest"</figcaption>
+							</td>
+							<td style="text-align: center;">
+								<img src="p4/4.3 After 1500 gpermsq.png" width="400px" />
+								<figcaption>High density cloth at "rest"</figcaption>
+							</td>
+						</tr>
+						<tr>
+							<td style="text-align: center;">
+								<img src="p4/4.3 After 500ks.png" width="400px" />
+								<figcaption>Low spring constant cloth at "rest"</figcaption>
+							</td>
+							<td style="text-align: center;">
+								<img src="p4/4.3 After 50000ks.png" width="400px" />
+								<figcaption>High spring constant cloth at "rest"</figcaption>
+							</td>
+						</tr>
+					</table>
+				</div>
+
+			<p>From a qualitative standpoint, it is no question that all of the above settings for the fabric begin at the same state. However, during simulation of self-collision, there are some noticable differences in the way the fabric interacts with itself. The default fabric has medium folds, with ripples traveling partially up the fabric as it is pulled downwards by gravity. The increased density fabric folds into smaller creases, and has less ripple effects presumably due to the increased force required to move the fabric. Comparing the low spring vs high spring constant cases, the higher the spring constant (more rigid), the larger the folds as the springs resist creasing with high tension.</p>
+
+			<p>By the time the fabrics are all laid out on the plane, the influences of the fabric parameters still have some nuance. The default fabric lays somewhat comfortably with some ripples. The high density fabric on the other hand has tighter folds, with ripples left over from the random unwavering drop. Finally, the more rigid fabric with tighter spring forces is pulled into a smoother texture with no ripples, whereas lower spring forces left the fabric in a contorted rest position.</p>
 
 				<h2>Part 5: Shaders</h2>
 				Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
