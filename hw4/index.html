@@ -27,59 +27,59 @@
 	</head>
 	<body>
 		<div class="container">
-		<h1>CS184/284A Spring 2025 Homework 4 Write-Up</h1>
-		<div style="text-align: center;">Names: Karson Du, Patrick Sanchez </div>
+			<h1>CS184/284A Spring 2025 Homework 4 Write-Up</h1>
+			<div style="text-align: center;">Names: Karson Du, Patrick Sanchez </div>
 
-		<br>
+			<br>
 
-		Link to webpage: <a href="https://cal-cs184-student.github.io/hw-webpages-pork-chopped-website/hw4/index.html">https://cal-cs184-student.github.io/hw-webpages-pork-chopped-website/hw4/index.html</a>
+			Link to webpage: <a href="https://cal-cs184-student.github.io/hw-webpages-pork-chopped-website/hw4/index.html">https://cal-cs184-student.github.io/hw-webpages-pork-chopped-website/hw4/index.html</a>
 
-		<br>
+			<br>
 
-		Link to GitHub repository: <a href="https://github.com/cal-cs184-student/sp25-hw4-lebron">https://github.com/cal-cs184-student/sp25-hw4-lebron</a>
+			Link to GitHub repository: <a href="https://github.com/cal-cs184-student/sp25-hw4-lebron">https://github.com/cal-cs184-student/sp25-hw4-lebron</a>
 
-		<figure>
-			<img src="clothsim.png" alt="Cloth draped over sphere" style="width:70%"/>
-			<figcaption>&#128514;</figcaption>
-		</figure>
+			<figure>
+				<img src="clothsim.png" alt="Cloth draped over sphere" style="width:70%" />
+				<figcaption>&#128514;</figcaption>
+			</figure>
 
-		<!--
-		We've already added one heading per part, to make your write-up as navigable when grading. Please fit your write-up within these sections!
-		-->
+			<!--
+	We've already added one heading per part, to make your write-up as navigable when grading. Please fit your write-up within these sections!
+	-->
 
-		<h2>Overview</h2>
-		Give a high-level overview of what you implemented in this homework. Think about what you've built as a whole. Share your thoughts on what interesting things you've learned from completing the homework.
+			<h2>Overview</h2>
+			Give a high-level overview of what you implemented in this homework. Think about what you've built as a whole. Share your thoughts on what interesting things you've learned from completing the homework.
 
-		<h2>Part 1: Masses and springs</h2>
-		 
-	
-		<div style="display: flex; flex-direction: column; align-items: center;">
-			<table style="width: 100%; text-align: center; border-collapse: collapse;">
-			  <tr>
-				<td style="text-align: center;">
-				  <img src="scene_pinned2.png" width="400px"/>
-				  <figcaption>Pinned2 Scene</figcaption>
-				</td>
-				<td style="text-align: center;">
-				  <img src="NoShear.png" width="400px"/>
-				  <figcaption>Without any Shearing Constraints</figcaption>
-				</td>
-			  </tr>
-			  <tr>
-				<td style="text-align: center;">
-				  <img src="OnlyShear.png" width="400px"/>
-				  <figcaption>With only Shearing Constraint</figcaption>
-				</td>
-				<td style="text-align: center;">
-				  <img src="AllConstraints.png" width="400px"/>
-				  <figcaption>With all Constraints</figcaption>
-				</td>
-			  </tr>
-			</table>
-		</div>
+			<h2>Part 1: Masses and springs</h2>
 
 
-		<h2>Part 2: Simulation via numerical integration</h2>
+			<div style="display: flex; flex-direction: column; align-items: center;">
+				<table style="width: 100%; text-align: center; border-collapse: collapse;">
+					<tr>
+						<td style="text-align: center;">
+							<img src="scene_pinned2.png" width="400px" />
+							<figcaption>Pinned2 Scene</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="NoShear.png" width="400px" />
+							<figcaption>Without any Shearing Constraints</figcaption>
+						</td>
+					</tr>
+					<tr>
+						<td style="text-align: center;">
+							<img src="OnlyShear.png" width="400px" />
+							<figcaption>With only Shearing Constraint</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="AllConstraints.png" width="400px" />
+							<figcaption>With all Constraints</figcaption>
+						</td>
+					</tr>
+				</table>
+			</div>
+
+
+			<h2>Part 2: Simulation via numerical integration</h2>
 			<p>For Part 2, we incorporate two forces for simulation. The first, external forces (e.g. gravity), and the second, spring correction forces.</p>
 			<p>We first begin by calculating force acting on each point mass. For external forces acting on each point mass, we follow \(F = ma\). Then, for every spring, we calculate spring correction forces with \(F_s = k_s \cdot ( \| p_a - p_b \| - l )\), where \(k_s\) is the spring constant, \(p_a\) & \(p_a\) are the end positions of our spring, and \(l\) is the length of the spring.</p>
 			<p>For every point mass that is not pinned, we apply the forces to each using Verlet Integration with a damping factor to account for energy loss from friction, heat, etc.:</p>
@@ -95,106 +95,181 @@
 
 			<p>Then to limit the spring deformation and stretch to reasonable amounts, where any pair of unpinned point masses are constrained and corrected towards at most 10% greater than the spring rest length.</p>
 
-				<div style="display: flex; flex-direction: column; align-items: center;">
-					<table style="width: 100%; text-align: center; border-collapse: collapse;">
-						<tr>
-							<td style="text-align: center;">
-								<img src="p2/2.1_500_ks.png" width="400px" />
-								<figcaption>Low spring constant</figcaption>
-							</td>
-							<td style="text-align: center;">
-								<img src="p2/2.1.1_500_ks_swing.png" width="400px" />
-								<figcaption>Low spring constant, mid swing</figcaption>
-							</td>
-						</tr>
-						<tr>
-							<td style="text-align: center;">
-								<img src="p2/2.2_50000_ks.png" width="400px" />
-								<figcaption>High spring constant</figcaption>
-							</td>
-							<td style="text-align: center;">
-								<img src="p2/2.2.1_50000_ks_swing.png" width="400px" />
-								<figcaption>High spring constant, mid swing</figcaption>
-							</td>
-						</tr>
-						<tr>
-							<td style="text-align: center;">
-								<img src="p2/2.3_15_gpermsq.png" width="400px" />
-								<figcaption>low density</figcaption>
-							</td>
-							<td style="text-align: center;">
-								<img src="p2/2.3.1_15_gpermsq_swing.png" width="400px" />
-								<figcaption>low density, mid swing</figcaption>
-							</td>
-						</tr>
-						<tr>
-							<td style="text-align: center;">
-								<img src="p2/2.4_1500_gpermsq.png" width="400px" />
-								<figcaption>high density</figcaption>
-							</td>
-							<td style="text-align: center;">
-								<img src="p2/2.4.1_1500_gpermsq_swing.png" width="400px" />
-								<figcaption>high density, mid swing</figcaption>
-							</td>
-						</tr>
-						<tr>
-							<td style="text-align: center;">
-								<img src="p2/2.5_0_damp.png" width="400px" />
-								<figcaption>0% force dampening</figcaption>
-							</td>
-							<td style="text-align: center;">
-								<img src="p2/2.6_100_damp.png" width="400px" />
-								<figcaption>100% force dampening</figcaption>
-							</td>
-						</tr>
-						<tr>
-							<td style="text-align: center;">
-								<img src="p2/2.7_pinned4_shaded.png" width="400px" />
-								<figcaption>Default settings, 4 corners pinned</figcaption>
-							</td>
-						</tr>
-					</table>
-				</div>
+			<div style="display: flex; flex-direction: column; align-items: center;">
+				<table style="width: 100%; text-align: center; border-collapse: collapse;">
+					<tr>
+						<td style="text-align: center;">
+							<img src="p2/2.1_500_ks.png" width="400px" />
+							<figcaption>Low spring constant</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="p2/2.1.1_500_ks_swing.png" width="400px" />
+							<figcaption>Low spring constant, mid swing</figcaption>
+						</td>
+					</tr>
+					<tr>
+						<td style="text-align: center;">
+							<img src="p2/2.2_50000_ks.png" width="400px" />
+							<figcaption>High spring constant</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="p2/2.2.1_50000_ks_swing.png" width="400px" />
+							<figcaption>High spring constant, mid swing</figcaption>
+						</td>
+					</tr>
+					<tr>
+						<td style="text-align: center;">
+							<img src="p2/2.3_15_gpermsq.png" width="400px" />
+							<figcaption>low density</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="p2/2.3.1_15_gpermsq_swing.png" width="400px" />
+							<figcaption>low density, mid swing</figcaption>
+						</td>
+					</tr>
+					<tr>
+						<td style="text-align: center;">
+							<img src="p2/2.4_1500_gpermsq.png" width="400px" />
+							<figcaption>high density</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="p2/2.4.1_1500_gpermsq_swing.png" width="400px" />
+							<figcaption>high density, mid swing</figcaption>
+						</td>
+					</tr>
+					<tr>
+						<td style="text-align: center;">
+							<img src="p2/2.5_0_damp.png" width="400px" />
+							<figcaption>0% force dampening</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="p2/2.6_100_damp.png" width="400px" />
+							<figcaption>100% force dampening</figcaption>
+						</td>
+					</tr>
+					<tr>
+						<td style="text-align: center;">
+							<img src="p2/2.7_pinned4_shaded.png" width="400px" />
+							<figcaption>Default settings, 4 corners pinned</figcaption>
+						</td>
+					</tr>
+				</table>
+			</div>
 
-				<p>Adjusting the properties of the fabric results in a few notable differences. Lower spring constants resulted in the fabric stretching more, as it drapes lower and swings with more pronounced waves. The higher spring constants appear more rigid in rest and in motion. The low density fabric folds over relaxed with one larger crease at the top compared to the high density fabric, which experienced bowing on the sides due to higher tension as well as tighter upper folds. With no dampening, the fabric's motion was chaotic, as it conserved all the energy converted from potential to kinetic with volatile ripples and great swings. The fabric with 100% dampening fell down rather elegantly, although slower than would be expected with Earth's gravity, there was little to no over-swing, as it reached a near rest position by the first one. The final example of fabric simulation with all four corners pinned sits comfortably, as each corner's tension causes diagonal peaks, with smooth valleys resting between each.</p>
-		<h2>Part 3: Handling collisions with other objects</h2>
-		In our implementation of handling collisions with spheres, we see if the point mass is inside the sphere by subtracting the origin of the sphere from the position of the point mass to get a vector, if the norm of this vector is smaller than the radius of the sphere, then we know the point mass is inside the sphere, to push it out to the surface of the sphere, we divide our vector by its norm to get a unit vector pointing in the direction of the point mass from origin of the sphere, we then do the origin of the sphere plus the unit vector being multiplied by the spheres radius and set this as the new position of the point mass since this new position is where the point mass would intersect the sphere, we then scale this position by 1-friction. If we found that the norm of the distance vector was larger than the radius of the sphere, we know that the point mass is outside the sphere so we skip it. We do this collision check for all point masses.
+			<p>Adjusting the properties of the fabric results in a few notable differences. Lower spring constants resulted in the fabric stretching more, as it drapes lower and swings with more pronounced waves. The higher spring constants appear more rigid in rest and in motion. The low density fabric folds over relaxed with one larger crease at the top compared to the high density fabric, which experienced bowing on the sides due to higher tension as well as tighter upper folds. With no dampening, the fabric's motion was chaotic, as it conserved all the energy converted from potential to kinetic with volatile ripples and great swings. The fabric with 100% dampening fell down rather elegantly, although slower than would be expected with Earth's gravity, there was little to no over-swing, as it reached a near rest position by the first one. The final example of fabric simulation with all four corners pinned sits comfortably, as each corner's tension causes diagonal peaks, with smooth valleys resting between each.</p>
+			<h2>Part 3: Handling collisions with other objects</h2>
+			In our implementation of handling collisions with spheres, we see if the point mass is inside the sphere by subtracting the origin of the sphere from the position of the point mass to get a vector, if the norm of this vector is smaller than the radius of the sphere, then we know the point mass is inside the sphere, to push it out to the surface of the sphere, we divide our vector by its norm to get a unit vector pointing in the direction of the point mass from origin of the sphere, we then do the origin of the sphere plus the unit vector being multiplied by the spheres radius and set this as the new position of the point mass since this new position is where the point mass would intersect the sphere, we then scale this position by 1-friction. If we found that the norm of the distance vector was larger than the radius of the sphere, we know that the point mass is outside the sphere so we skip it. We do this collision check for all point masses.
 
-		For our implementation of handling collisions with planes, we take advantage of the fact that all point masses have a last_position and position vector to represent their coordinates, we get two vectors, one from the last position to the point on the plane, and another from the current position to the point on the plane. We take the dot products of the current position vector, if it is negative then we know the point mass moved to a different side of the plane. We then calculate t which is the distance from the old point to the plane, we use this t to find the tangent point which is the old position + t * the distance from the current position to the last position. We then calculate a correction vector which is the tangent point + the plane normal times the sufrace offset minus the last position. Then we apply this correction vector to the last position and scale this position by 1-friction.
+			For our implementation of handling collisions with planes, we take advantage of the fact that all point masses have a last_position and position vector to represent their coordinates, we get two vectors, one from the last position to the point on the plane, and another from the current position to the point on the plane. We take the dot products of the current position vector, if it is negative then we know the point mass moved to a different side of the plane. We then calculate t which is the distance from the old point to the plane, we use this t to find the tangent point which is the old position + t * the distance from the current position to the last position. We then calculate a correction vector which is the tangent point + the plane normal times the sufrace offset minus the last position. Then we apply this correction vector to the last position and scale this position by 1-friction.
 
 
-		<div style="display: flex; flex-direction: column; align-items: center;">
-			<table style="width: 100%; text-align: center; border-collapse: collapse;">
-				<tr>
-					<td style="text-align: center;">
-						<img src="Part3KS500.png" width="400px" />
-						<figcaption>With a KS of 500, we see that the cloth is very slack on top of the ball, the cloth drapes clearly over the ball and almost completely wraps the ball.</figcaption>
-					</td>
-					<td style="text-align: center;">
-						<img src="Part3KS5000.png" width="400px" />
-						<figcaption>With a KS of 5000, the cloth is slightly more stiff than a KS of 500, but there are still many folds on the cloth and the cloth still covers the ball.</figcaption>
-					</td>
-					<td style="text-align: center;">
-						<img src="Part3KS50000.png" width="400px" />
-						<figcaption>With a KS of 50000, a lot of the previous folds are now gone, compared to the previous KS where the cloth appears to start wrapping around the bottom of the ball, this cloth does not do that</figcaption>
-					</td>
-				</tr>
-				<tr>
-					<figure>
-						<img src="Part3Plane.png" alt="Plane" style="width:50%" />
-						<figcaption>Cloth lying peacefully at rest on the plane</figcaption>
-					</figure>
-				</tr>
-			</table>
-		</div>
-		<h2>Part 4: Handling self-collisions</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+			<div style="display: flex; flex-direction: column; align-items: center;">
+				<table style="width: 100%; text-align: center; border-collapse: collapse;">
+					<tr>
+						<td style="text-align: center;">
+							<img src="Part3KS500.png" width="400px" />
+							<figcaption>With a KS of 500, we see that the cloth is very slack on top of the ball, the cloth drapes clearly over the ball and almost completely wraps the ball.</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="Part3KS5000.png" width="400px" />
+							<figcaption>With a KS of 5000, the cloth is slightly more stiff than a KS of 500, but there are still many folds on the cloth and the cloth still covers the ball.</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="Part3KS50000.png" width="400px" />
+							<figcaption>With a KS of 50000, a lot of the previous folds are now gone, compared to the previous KS where the cloth appears to start wrapping around the bottom of the ball, this cloth does not do that</figcaption>
+						</td>
+					</tr>
+					<tr>
+						<figure>
+							<img src="Part3Plane.png" alt="Plane" style="width:50%" />
+							<figcaption>Cloth lying peacefully at rest on the plane</figcaption>
+						</figure>
+					</tr>
+				</table>
+			</div>
+			<h2>Part 4: Handling self-collisions</h2>
+			<p>Now that our cloth can handle simple collisions with planes and spheres, we arive at the question of how we simulate the cloth at a realistic resting state? To achieve this, we added self-collision functionality during simulation.</p>
 
-		<h2>Part 5: Shaders</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+			<p>Firstly, we organize our point masses into 3D boxes, based on the point mass's position. The boxes have dimensions \( w \cdot h \cdot t \) determined via 3 equations: \( w = 3 \cdot width / num_width_points \), \( h = 3 \cdot height / num_height_points \), and \( t = max(w,h) \). Based on these number of points, the size of these adjacency boxes of point masses scale.</p>
 
-		<h2>(Optional) Part 6: Extra Credit - Additional cloth simulation features!</h2>
-		
+			<p>Secondly, we iterate through all of the point masses inside our fabric to initialize a map that assigns each point mass to the unique identifier of its corresponding box.</p>
+
+			<p>Thirdly, for every point mass, we check every other point mass within the shared adjacency box, and check if the two are within \( 2 \cdot thickness \) distance apart. If so, we start collecting up correctional forces from all the other point masses, then average them out to apply to the original input point mass to simulate the fabric pushing against itself (perfectly folded fabric could only be \(2 \cdot thickness \) wide).</p>
+
+			<div style="display: flex; flex-direction: column; align-items: center;">
+				<table style="width: 100%; text-align: center; border-collapse: collapse;">
+					<tr>
+						<td style="text-align: center;">
+							<img src="p4/4.1 Before.png" width="400px" />
+							<figcaption>Standing cloth before drop</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="p4/4.1 Before 1500 gpermsq.png" width="400px" />
+							<figcaption>High density cloth, same setup</figcaption>
+						</td>
+					</tr>
+					<tr>
+						<td style="text-align: center;">
+							<img src="p4/4.1 Before 500ks.png" width="400px" />
+							<figcaption>Low spring constant, same setup</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="p4/4.1 Before 50000ks.png" width="400px" />
+							<figcaption>High spring constant, same setup</figcaption>
+						</td>
+					</tr>
+					<tr>
+						<td style="text-align: center;">
+							<img src="p4/4.2 During.png" width="400px" />
+							<figcaption>Default cloth self-colliding</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="p4/4.2 During 1500 gpermsq.png" width="400px" />
+							<figcaption>High density cloth self-colliding</figcaption>
+						</td>
+					</tr>
+					<tr>
+						<td style="text-align: center;">
+							<img src="p4/4.2 During 500ks.png" width="400px" />
+							<figcaption>Low spring constant cloth self-colliding</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="p4/4.2 During 50000ks.png" width="400px" />
+							<figcaption>High spring constant cloth self-colliding</figcaption>
+						</td>
+					</tr>
+					<tr>
+						<td style="text-align: center;">
+							<img src="p4/4.3 After.png" width="400px" />
+							<figcaption>Default cloth at "rest"</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="p4/4.3 After 1500 gpermsq.png" width="400px" />
+							<figcaption>High density cloth at "rest"</figcaption>
+						</td>
+					</tr>
+					<tr>
+						<td style="text-align: center;">
+							<img src="p4/4.3 After 500ks.png" width="400px" />
+							<figcaption>Low spring constant cloth at "rest"</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="p4/4.3 After 50000ks.png" width="400px" />
+							<figcaption>High spring constant cloth at "rest"</figcaption>
+						</td>
+					</tr>
+				</table>
+			</div>
+
+			<p>From a qualitative standpoint, it is no question that all of the above settings for the fabric begin at the same state. However, during simulation of self-collision, there are some noticable differences in the way the fabric interacts with itself. The default fabric has medium folds, with ripples traveling partially up the fabric as it is pulled downwards by gravity. The increased density fabric folds into smaller creases, and has less ripple effects presumably due to the increased force required to move the fabric. Comparing the low spring vs high spring constant cases, the higher the spring constant (more rigid), the larger the folds as the springs resist creasing with high tension.</p>
+
+			<p>By the time the fabrics are all laid out on the plane, the influences of the fabric parameters still have some nuance. The default fabric lays somewhat comfortably with some ripples. The high density fabric on the other hand has tighter folds, with ripples left over from the random unwavering drop. Finally, the more rigid fabric with tighter spring forces is pulled into a smoother texture with no ripples, whereas lower spring forces left the fabric in a contorted rest position.</p>
+			
+			<h2>Part 5: Shaders</h2>
+			Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+			<h2>(Optional) Part 6: Extra Credit - Additional cloth simulation features!</h2>
+
 		</div>
 	</body>
 </html>
