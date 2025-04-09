@@ -264,13 +264,88 @@
 			<p>From a qualitative standpoint, it is no question that all of the above settings for the fabric begin at the same state. However, during simulation of self-collision, there are some noticable differences in the way the fabric interacts with itself. The default fabric has medium folds, with ripples traveling partially up the fabric as it is pulled downwards by gravity. The increased density fabric folds into smaller creases, and has less ripple effects presumably due to the increased force required to move the fabric. Comparing the low spring vs high spring constant cases, the higher the spring constant (more rigid), the larger the folds as the springs resist creasing with high tension.</p>
 
 			<p>By the time the fabrics are all laid out on the plane, the influences of the fabric parameters still have some nuance. The default fabric lays somewhat comfortably with some ripples. The high density fabric on the other hand has tighter folds, with ripples left over from the random unwavering drop. Finally, the more rigid fabric with tighter spring forces is pulled into a smoother texture with no ripples, whereas lower spring forces left the fabric in a contorted rest position.</p>
-			
+
 			<h2>Part 5: Shaders</h2>
 			<p>In OpenGL, we apply two kinds of shaders: vertex and fragment shaders. The vertex shader takes in a model's vertices and does the job of transforming the inputted positions in model space into world space via matrix transformations (with displacements when desired). The vertex shader also helps out the fragment shader by defining the normals, texture map coordinates, tangents, and screen position. The fragment shader takes outputs from the vertex shader to further apply lighting and material textures to the model. These inputs are then used to compute lighting effects caused by ambient, diffuse, specular, texture, bump, and displacement sources.</p>
 
-			<p>Speaking of Blinn-Phong, BP shading combines </p>
+			<p>Speaking of Blinn-Phong, BP shading combines ambient lighting around the world with the diffuse and specular light from an illuminated source. We selected a decent uniform ambient lighting of 0.1, which would lightly brighten the colors in the scene without removing too much contrast. Diffuse lighting was implemented by taking the inputted uniform color, then scaling down the brightness from our light source by distance and the angle the light impacted the surface. The specular lighting was calculated similarly, except scaled by distance and the relative position of the camera to the normal (which was further modified by raising the factor to the power of 12, giving off a bright but not too sharp reflective shine). </p>
 
-			<h2>(Optional) Part 6: Extra Credit - Additional cloth simulation features!</h2>
+			<div style="display: flex; flex-direction: column; align-items: center;">
+				<table style="width: 100%; text-align: center; border-collapse: collapse;">
+					<tr>
+						<td style="text-align: center;">
+							<img src="p5/5.1 ambient.png" width="400px" />
+							<figcaption>Only ambient lighting</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="p5/5.2 diffuse.png" width="400px" />
+							<figcaption>Only diffuse lighting</figcaption>
+						</td>
+					</tr>
+					<tr>
+						<td style="text-align: center;">
+							<img src="p5/5.3 specular.png" width="400px" />
+							<figcaption>Only specular lighting</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="p5/5.4 BlinnPhong.png" width="400px" />
+							<figcaption>Full Blinn Phong combination</figcaption>
+						</td>
+					</tr>
+					<tr>
+						<td style="text-align: center;">
+							<img src="p5/5.5 pearto.png" width="400px" />
+							<figcaption>Custom texture of Kasane Teto as a pear</figcaption>
+						</td>
+					</tr>
+					<tr>
+						<td style="text-align: center;">
+							<img src="p5/5.6 Bump.png" width="400px" />
+							<figcaption>Bump mapping from texture</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="p5/5.7 Displacement.png" width="400px" />
+							<figcaption>Displacement mapping from texture</figcaption>
+						</td>
+					</tr>
+				</table>
+			</div>
+
+			<p> For bump mapping and displacement mapping, we built upon the Blinn Phong shading model by adding some depth to the fabric and sphere. Bump mapping fakes surface detail by adjusting normals in the fragment shader based on a height map. We calculate partial derivatives like <code>dU = (h(u + 1/w, v) - h(u, v)) * k_h * k_n</code> and create a new normal <code>no = vec3(-dU, -dV, 1.0)</code>, which we transform into model space using the TBN matrix. This makes lighting react as if the surface is bumpy without modifying the mesh itself.</p>
+			<p> Displacement mapping actually shifts the vertex positions in the vertex shader. We use a formula like <code>p' = p + n * h(u, v) * k_h</code> to move each vertex along its normal based on the height map. This changes both lighting and silhouette, so it's more realistic than just adding fake lighting to the otherwise smooth surfaces.</p>
+
+			<div style="display: flex; flex-direction: column; align-items: center;">
+				<table style="width: 100%; text-align: center; border-collapse: collapse;">
+					<tr>
+						<td style="text-align: center;">
+							<img src="p5/5.8 16.png" width="400px" />
+							<figcaption>less coarse</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="p5/5.8.1 16.png" width="400px" />
+							<figcaption>less coarse enhanced</figcaption>
+						</td>
+					</tr>
+					<tr>
+						<td style="text-align: center;">
+							<img src="p5/5.9 128.png" width="400px" />
+							<figcaption>more coarse</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="p5/5.9.1 128.png" width="400px" />
+							<figcaption>more coarse enhanced</figcaption>
+						</td>
+					</tr>
+					<tr>
+						<td style="text-align: center;">
+							<img src="p5/5.10 mirror.png" width="400px" />
+							<figcaption>mirror finish</figcaption>
+						</td>
+					</tr>
+				</table>
+			</div>
+
+			<p>Adjusting the coarseness of the mesh, from 16 to 128, effectively changes the range of spikiness in the mesh. The lower coarseness sphere has fewer spikes, with a more distributed appearance of jagged points and a round-ish surface. The high coarseness sphere mesh has many more points, leading to a wide variety of sheer depth changes between the many points. Also check out the mirror skin!</p>
 
 		</div>
 	</body>
