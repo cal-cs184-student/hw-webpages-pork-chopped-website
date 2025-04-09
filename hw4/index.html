@@ -79,8 +79,83 @@
 		</div>
 
 		<h2>Part 2: Simulation via numerical integration</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+			<p>For Part 2, we incorporate two forces for simulation. The first, external forces (e.g. gravity), and the second, spring correction forces.</p>
+			<p>We first begin by calculating force acting on each point mass. For external forces acting on each point mass, we follow \(F = ma\). Then, for every spring, we calculate spring correction forces with \(F_s = k_s \cdot ( \| p_a - p_b \| - l )\), where \(k_s\) is the spring constant, \(p_a\) & \(p_a\) are the end positions of our spring, and \(l\) is the length of the spring.</p>
+			<p>For every point mass that is not pinned, we apply the forces to each using Verlet Integration with a damping factor to account for energy loss from friction, heat, etc.:</p>
 
+			<p>\[x_{t+\Delta t}=x_t+(1-d)\cdot\bigl(x_t-x_{t-\Delta t}\bigr)+a_t\cdot\Delta t^2\]</p>
+
+			<ul>
+				<li>\(x_t\): position</li>
+				<li>\(d\): damping term [0,1] to simulate energy loss.</li>
+				<li>\(a_t\): current acceleration from all forces</li>
+				<li>\(\Delta t\): time step (delta_t)</li>
+			</ul>
+
+			<p>Then to limit the spring deformation and stretch to reasonable amounts, where any pair of unpinned point masses are constrained and corrected towards at most 10% greater than the spring rest length.</p>
+
+				<div style="display: flex; flex-direction: column; align-items: center;">
+					<table style="width: 100%; text-align: center; border-collapse: collapse;">
+						<tr>
+							<td style="text-align: center;">
+								<img src="2.1 500 ks.png" width="400px" />
+								<figcaption>Low spring constant</figcaption>
+							</td>
+							<td style="text-align: center;">
+								<img src="2.1.1 500 ks swing.png" width="400px" />
+								<figcaption>Low spring constant, mid swing</figcaption>
+							</td>
+						</tr>
+						<tr>
+							<td style="text-align: center;">
+								<img src="2.2 50000 ks.png" width="400px" />
+								<figcaption>High spring constant</figcaption>
+							</td>
+							<td style="text-align: center;">
+								<img src="2.2.1 50000 ks swing.png" width="400px" />
+								<figcaption>High spring constant, mid swing</figcaption>
+							</td>
+						</tr>
+						<tr>
+							<td style="text-align: center;">
+								<img src="2.3 15 gpermsq.png" width="400px" />
+								<figcaption>low density</figcaption>
+							</td>
+							<td style="text-align: center;">
+								<img src="2.3.1 15 gpermsq swing.png" width="400px" />
+								<figcaption>low density, mid swing</figcaption>
+							</td>
+						</tr>
+						<tr>
+							<td style="text-align: center;">
+								<img src="2.4 1500 gpermsq.png" width="400px" />
+								<figcaption>high density</figcaption>
+							</td>
+							<td style="text-align: center;">
+								<img src="2.4.1 1500 gpermsq swing.png" width="400px" />
+								<figcaption>high density, mid swing</figcaption>
+							</td>
+						</tr>
+						<tr>
+							<td style="text-align: center;">
+								<img src="2.5 0 damp.png" width="400px" />
+								<figcaption>0% force dampening</figcaption>
+							</td>
+							<td style="text-align: center;">
+								<img src="2.6 100 damp.png" width="400px" />
+								<figcaption>100% force dampening</figcaption>
+							</td>
+						</tr>
+						<tr>
+							<td style="text-align: center;">
+								<img src="2.7 pinned4 shaded.png" width="400px" />
+								<figcaption>Default settings, 4 corners pinned</figcaption>
+							</td>
+						</tr>
+					</table>
+				</div>
+
+				<p>Adjusting the properties of the fabric results in a few notable differences. Lower spring constants resulted in the fabric stretching more, as it drapes lower and swings with more pronounced waves. The higher spring constants appear more rigid in rest and in motion. The low density fabric folds over relaxed with one larger crease at the top compared to the high density fabric, which experienced bowing on the sides due to higher tension as well as tighter upper folds. With no dampening, the fabric's motion was chaotic, as it conserved all the energy converted from potential to kinetic with volatile ripples and great swings. The fabric with 100% dampening fell down rather elegantly, although slower than would be expected with Earth's gravity, there was little to no over-swing, as it reached a near rest position by the first one. The final example of fabric simulation with all four corners pinned sits comfortably, as each corner's tension causes diagonal peaks, with smooth valleys resting between each.</p>
 		<h2>Part 3: Handling collisions with other objects</h2>
 		In our implementation of handling collisions with spheres, we see if the point mass is inside the sphere by subtracting the origin of the sphere from the position of the point mass to get a vector, if the norm of this vector is smaller than the radius of the sphere, then we know the point mass is inside the sphere, to push it out to the surface of the sphere, we divide our vector by its norm to get a unit vector pointing in the direction of the point mass from origin of the sphere, we then do the origin of the sphere plus the unit vector being multiplied by the spheres radius and set this as the new position of the point mass since this new position is where the point mass would intersect the sphere, we then scale this position by 1-friction. If we found that the norm of the distance vector was larger than the radius of the sphere, we know that the point mass is outside the sphere so we skip it. We do this collision check for all point masses.
 
